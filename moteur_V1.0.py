@@ -190,6 +190,9 @@ class Game(Rep_cellules, Rep_line):
     def get_cels_playable(self):
         return self.cels_playable
 
+    def add_cels_playable(self, cel):
+        self.cels_playable.append(cel)
+
     def calculate_best_cel_toPlay(self):
         return 0
 
@@ -240,42 +243,61 @@ class Game(Rep_cellules, Rep_line):
         i = cel.get_x()
         j = cel.get_y()
         ind = self.convert_ij_to_ind(i, j)
+        tmp_rep = self.get_rep_cels_game()
         if (direction == 'v'):
             code = cel.get_possible_V()
             ind1 = self.convert_ij_to_ind(i + 1, j)
             ind2 = self.convert_ij_to_ind(i + 2, j)
             ind3 = self.convert_ij_to_ind(i + 3, j)
             ind4 = self.convert_ij_to_ind(i + 4, j)
-            ind5 = self.convert_ij_to_ind(i + 5, j)
-            if (code == 104):
-                pos = np.array([ind, ind1, ind2, ind3, ind4])
-                return pos
-            if (code == 115):
-                pos = np.array([ind, ind1, ind2, ind3, ind5])
-                return pos
+            if ((tmp_rep[ind4].get_vertical() == 0) and (tmp_rep[ind1].get_vertical() == 0) and (
+                    tmp_rep[ind2].get_vertical() == 0) and (tmp_rep[ind3].get_vertical() == 0) and (
+                    tmp_rep[ind].get_vertical() == 0)):
+                if (code == 104):
+                    pos = np.array([ind, ind1, ind2, ind3, ind4])
+                    return pos
+            ind1 = self.convert_ij_to_ind(i - 1, j)
+            ind2 = self.convert_ij_to_ind(i - 2, j)
+            ind3 = self.convert_ij_to_ind(i - 3, j)
+            ind5 = self.convert_ij_to_ind(i - 4, j)
+            if ((tmp_rep[ind5].get_vertical() == 0) and (tmp_rep[ind1].get_vertical() == 0) and (
+                    tmp_rep[ind2].get_vertical() == 0) and (tmp_rep[ind3].get_vertical() == 0) and (
+                    tmp_rep[ind].get_vertical() == 0)):
+                if (code == 115):
+                    pos = np.array([ind, ind1, ind2, ind3, ind5])
+                    return pos
 
             if (code == 1113):
                 ind1 = self.convert_ij_to_ind(i + 1, j)
                 ind2 = self.convert_ij_to_ind(i + 2, j)
                 ind3 = self.convert_ij_to_ind(i + 3, j)
                 ind5 = self.convert_ij_to_ind(i - 1, j)
-                pos = np.array([ind, ind1, ind2, ind3, ind5])
-                return pos
+                if ((tmp_rep[ind5].get_vertical() == 0) and (tmp_rep[ind1].get_vertical() == 0) and (
+                        tmp_rep[ind2].get_vertical() == 0) and (tmp_rep[ind3].get_vertical() == 0) and (
+                        tmp_rep[ind].get_vertical() == 0)):
+                    pos = np.array([ind, ind1, ind2, ind3, ind5])
+                    return pos
 
             if (code == 1222):
                 ind1 = self.convert_ij_to_ind(i + 1, j)
                 ind2 = self.convert_ij_to_ind(i + 2, j)
                 ind3 = self.convert_ij_to_ind(i - 2, j)
                 ind5 = self.convert_ij_to_ind(i - 1, j)
-                pos = np.array([ind, ind1, ind2, ind3, ind5])
-                return pos
+                if ((tmp_rep[ind5].get_vertical() == 0) and (tmp_rep[ind1].get_vertical() == 0) and (
+                        tmp_rep[ind2].get_vertical() == 0) and (tmp_rep[ind3].get_vertical() == 0) and (
+                        tmp_rep[ind].get_vertical() == 0)):
+                    pos = np.array([ind, ind1, ind2, ind3, ind5])
+                    return pos
             if (code == 1331):
                 ind1 = self.convert_ij_to_ind(i + 1, j)
                 ind2 = self.convert_ij_to_ind(i - 2, j)
                 ind3 = self.convert_ij_to_ind(i - 3, j)
                 ind5 = self.convert_ij_to_ind(i - 1, j)
-                pos = np.array([ind, ind1, ind2, ind3, ind5])
-                return pos
+                if ((tmp_rep[ind5].get_vertical() == 0) and (tmp_rep[ind1].get_vertical() == 0) and (
+                        tmp_rep[ind2].get_vertical() == 0) and (tmp_rep[ind3].get_vertical() == 0) and (
+                        tmp_rep[ind].get_vertical() == 0)):
+                    pos = np.array([ind, ind1, ind2, ind3, ind5])
+                    return pos
         # --------------------------------- line horizentale --------------------------------------
         elif (direction == 'h'):
             code = cel.get_possible_H()
@@ -283,37 +305,56 @@ class Game(Rep_cellules, Rep_line):
             ind2 = self.convert_ij_to_ind(i, j + 2)
             ind3 = self.convert_ij_to_ind(i, j + 3)
             ind4 = self.convert_ij_to_ind(i, j + 4)
-            ind5 = self.convert_ij_to_ind(i, j + 5)
             if (code == 204):
-                pos = np.array([ind, ind1, ind2, ind3, ind4])
-                return pos
+                if ((tmp_rep[ind4].get_horizontal() == 0) and (tmp_rep[ind1].get_horizontal() == 0) and (
+                        tmp_rep[ind2].get_horizontal() == 0) and (tmp_rep[ind3].get_horizontal() == 0) and (
+                        tmp_rep[ind].get_horizontal() == 0)):
+                    pos = np.array([ind, ind1, ind2, ind3, ind4])
+                    return pos
+
+            ind1 = self.convert_ij_to_ind(i, j - 1)
+            ind2 = self.convert_ij_to_ind(i, j - 2)
+            ind3 = self.convert_ij_to_ind(i, j - 3)
+            ind5 = self.convert_ij_to_ind(i, j - 4)
             if (code == 215):
-                pos = np.array([ind, ind1, ind2, ind3, ind5])
-                return pos
+                if ((tmp_rep[ind5].get_horizontal() == 0) and (tmp_rep[ind1].get_horizontal() == 0) and (
+                        tmp_rep[ind2].get_horizontal() == 0) and (tmp_rep[ind3].get_horizontal() == 0) and (
+                        tmp_rep[ind].get_horizontal() == 0)):
+                    pos = np.array([ind, ind1, ind2, ind3, ind5])
+                    return pos
 
             if (code == 2113):
                 ind1 = self.convert_ij_to_ind(i, j + 1)
                 ind2 = self.convert_ij_to_ind(i, j + 2)
                 ind3 = self.convert_ij_to_ind(i, j + 3)
                 ind4 = self.convert_ij_to_ind(i, j - 1)
-                pos = np.array([ind, ind1, ind2, ind3, ind4])
-                return pos
+                if ((tmp_rep[ind4].get_horizontal() == 0) and (tmp_rep[ind1].get_horizontal() == 0) and (
+                        tmp_rep[ind2].get_horizontal() == 0) and (tmp_rep[ind3].get_horizontal() == 0) and (
+                        tmp_rep[ind].get_horizontal() == 0)):
+                    pos = np.array([ind, ind1, ind2, ind3, ind4])
+                    return pos
 
             if (code == 2222):
                 ind1 = self.convert_ij_to_ind(i, j - 1)
                 ind2 = self.convert_ij_to_ind(i, j - 2)
                 ind3 = self.convert_ij_to_ind(i, j - 3)
                 ind4 = self.convert_ij_to_ind(i, j + 1)
-                pos = np.array([ind, ind1, ind2, ind3, ind4])
-                return pos
+                if ((tmp_rep[ind4].get_horizontal() == 0) and (tmp_rep[ind1].get_horizontal() == 0) and (
+                        tmp_rep[ind2].get_horizontal() == 0) and (tmp_rep[ind3].get_horizontal() == 0) and (
+                        tmp_rep[ind].get_horizontal() == 0)):
+                    pos = np.array([ind, ind1, ind2, ind3, ind4])
+                    return pos
 
             if (code == 2331):
                 ind1 = self.convert_ij_to_ind(i, j - 1)
                 ind2 = self.convert_ij_to_ind(i, j - 2)
                 ind3 = self.convert_ij_to_ind(i, j + 1)
                 ind4 = self.convert_ij_to_ind(i, j + 2)
-                pos = np.array([ind, ind1, ind2, ind3, ind4])
-                return pos
+                if ((tmp_rep[ind5].get_horizontal() == 0) and (tmp_rep[ind1].get_horizontal() == 0) and (
+                        tmp_rep[ind2].get_horizontal() == 0) and (tmp_rep[ind3].get_horizontal() == 0) and (
+                        tmp_rep[ind].get_horizontal() == 0)):
+                    pos = np.array([ind, ind1, ind2, ind3, ind4])
+                    return pos
             # --------------------------------- line left --------------------------------------
         elif (direction == 'dl'):
             code = cel.get_possible_DL()
@@ -321,37 +362,54 @@ class Game(Rep_cellules, Rep_line):
             ind2 = self.convert_ij_to_ind(i - 2, j + 2)
             ind3 = self.convert_ij_to_ind(i - 3, j + 3)
             ind4 = self.convert_ij_to_ind(i - 4, j + 4)
-            ind5 = self.convert_ij_to_ind(i - 5, j + 5)
             if (code == 304):
-                pos = np.array([ind, ind1, ind2, ind3, ind4])
-                return pos
-
+                if ((tmp_rep[ind4].get_diagonal_left() == 0) and (tmp_rep[ind1].get_diagonal_left() == 0) and (
+                        tmp_rep[ind2].get_diagonal_left() == 0) and (tmp_rep[ind3].get_diagonal_left() == 0) and (
+                        tmp_rep[ind].get_diagonal_left() == 0)):
+                    pos = np.array([ind, ind1, ind2, ind3, ind4])
+                    return pos
+            ind1 = self.convert_ij_to_ind(i + 1, j - 1)
+            ind2 = self.convert_ij_to_ind(i + 2, j - 2)
+            ind3 = self.convert_ij_to_ind(i + 3, j - 3)
+            ind5 = self.convert_ij_to_ind(i + 4, j - 4)
             if (code == 315):
-                pos = np.array([ind, ind1, ind2, ind3, ind5])
-                return pos
+                if ((tmp_rep[ind5].get_diagonal_left() == 0) and (tmp_rep[ind1].get_diagonal_left() == 0) and (
+                        tmp_rep[ind2].get_diagonal_left() == 0) and (tmp_rep[ind3].get_diagonal_left() == 0) and (
+                        tmp_rep[ind].get_diagonal_left() == 0)):
+                    pos = np.array([ind, ind1, ind2, ind3, ind5])
+                    return pos
 
             if (code == 3113):
                 ind1 = self.convert_ij_to_ind(i - 1, j + 1)
                 ind2 = self.convert_ij_to_ind(i - 2, j + 2)
                 ind3 = self.convert_ij_to_ind(i - 3, j + 3)
                 ind5 = self.convert_ij_to_ind(i + 1, j - 1)
-                pos = np.array([ind, ind1, ind2, ind3, ind5])
-                return pos
+                if ((tmp_rep[ind5].get_diagonal_left() == 0) and (tmp_rep[ind1].get_diagonal_left() == 0) and (
+                        tmp_rep[ind2].get_diagonal_left() == 0) and (tmp_rep[ind3].get_diagonal_left() == 0) and (
+                        tmp_rep[ind].get_diagonal_left() == 0)):
+                    pos = np.array([ind, ind1, ind2, ind3, ind5])
+                    return pos
 
             if (code == 3222):
                 ind1 = self.convert_ij_to_ind(i - 1, j + 1)
                 ind2 = self.convert_ij_to_ind(i + 2, j - 2)
                 ind3 = self.convert_ij_to_ind(i + 3, j - 3)
                 ind5 = self.convert_ij_to_ind(i + 1, j - 1)
-                pos = np.array([ind, ind1, ind2, ind3, ind5])
-                return pos
+                if ((tmp_rep[ind5].get_diagonal_left() == 0) and (tmp_rep[ind1].get_diagonal_left() == 0) and (
+                        tmp_rep[ind2].get_diagonal_left() == 0) and (tmp_rep[ind3].get_diagonal_left() == 0) and (
+                        tmp_rep[ind].get_diagonal_left() == 0)):
+                    pos = np.array([ind, ind1, ind2, ind3, ind5])
+                    return pos
             if (code == 3331):
                 ind1 = self.convert_ij_to_ind(i + 1, j - 1)
                 ind2 = self.convert_ij_to_ind(i + 2, j - 2)
                 ind3 = self.convert_ij_to_ind(i - 2, j + 2)
                 ind5 = self.convert_ij_to_ind(i - 1, j + 1)
-                pos = np.array([ind, ind1, ind2, ind3, ind5])
-                return pos
+                if ((tmp_rep[ind5].get_diagonal_left() == 0) and (tmp_rep[ind1].get_diagonal_left() == 0) and (
+                        tmp_rep[ind2].get_diagonal_left() == 0) and (tmp_rep[ind3].get_diagonal_left() == 0) and (
+                        tmp_rep[ind].get_diagonal_left() == 0)):
+                    pos = np.array([ind, ind1, ind2, ind3, ind5])
+                    return pos
         # --------------------------------- line right --------------------------------------
         if (direction == 'dr'):
             code = cel.get_possible_DR()
@@ -359,39 +417,59 @@ class Game(Rep_cellules, Rep_line):
             ind2 = self.convert_ij_to_ind(i + 2, j + 2)
             ind3 = self.convert_ij_to_ind(i + 3, j + 3)
             ind4 = self.convert_ij_to_ind(i + 4, j + 4)
-            ind5 = self.convert_ij_to_ind(i + 5, j + 5)
             if (code == 404):
-                pos = np.array([ind, ind1, ind2, ind3, ind4])
-                return pos
+                if ((tmp_rep[ind4].get_diagonal_right() == 0) and (tmp_rep[ind1].get_diagonal_right() == 0) and (
+                        tmp_rep[ind4].get_diagonal_right() == 0) and (tmp_rep[ind3].get_diagonal_right() == 0) and (
+                        tmp_rep[ind].get_diagonal_right() == 0)):
+                    pos = np.array([ind, ind1, ind2, ind3, ind4])
+                    return pos
+            ind1 = self.convert_ij_to_ind(i - 1, j - 1)
+            ind2 = self.convert_ij_to_ind(i - 2, j - 2)
+            ind3 = self.convert_ij_to_ind(i - 3, j - 3)
+            ind5 = self.convert_ij_to_ind(i - 4, j - 4)
             if (code == 415):
-                pos = np.array([ind, ind1, ind2, ind3, ind5])
-                return pos
+                if ((tmp_rep[ind5].get_diagonal_right() == 0) and (tmp_rep[ind1].get_diagonal_right() == 0) and (
+                        tmp_rep[ind4].get_diagonal_right() == 0) and (tmp_rep[ind3].get_diagonal_right() == 0) and (
+                        tmp_rep[ind].get_diagonal_right() == 0)):
+                    pos = np.array([ind, ind1, ind2, ind3, ind5])
+                    return pos
             if (code == 4113):
                 ind13 = self.convert_ij_to_ind(i - 1, j - 1)
                 ind14 = self.convert_ij_to_ind(i + 3, j - 3)
                 ind15 = self.convert_ij_to_ind(i + 1, j + 1)
                 ind16 = self.convert_ij_to_ind(i + 2, j + 2)
-                pos = np.array([ind, ind13, ind14, ind15, ind16])
-                return pos
+                if ((tmp_rep[ind13].get_diagonal_right() == 0) and (tmp_rep[ind14].get_diagonal_right() == 0) and (
+                        tmp_rep[ind15].get_diagonal_right() == 0) and (tmp_rep[ind16].get_diagonal_right() == 0) and (
+                        tmp_rep[ind].get_diagonal_right() == 0)):
+                    pos = np.array([ind, ind13, ind14, ind15, ind16])
+                    return pos
             if (code == 4222):
                 ind13 = self.convert_ij_to_ind(i - 1, j - 1)
                 ind14 = self.convert_ij_to_ind(i - 2, j - 2)
                 ind15 = self.convert_ij_to_ind(i + 1, j + 1)
                 ind16 = self.convert_ij_to_ind(i + 2, j + 2)
-                pos = np.array([ind, ind13, ind14, ind15, ind16])
-                return pos
+                if ((tmp_rep[ind13].get_diagonal_right() == 0) and (tmp_rep[ind14].get_diagonal_right() == 0) and (
+                        tmp_rep[ind15].get_diagonal_right() == 0) and (tmp_rep[ind16].get_diagonal_right() == 0) and (
+                        tmp_rep[ind].get_diagonal_right() == 0)):
+                    pos = np.array([ind, ind13, ind14, ind15, ind16])
+                    return pos
             if (code == 4331):
                 ind13 = self.convert_ij_to_ind(i - 1, j - 1)
                 ind14 = self.convert_ij_to_ind(i - 2, j - 2)
                 ind15 = self.convert_ij_to_ind(i - 3, j - 3)
                 ind16 = self.convert_ij_to_ind(i + 1, j + 1)
-                pos = np.array([ind, ind13, ind14, ind15, ind16])
-                return pos
+                if ((tmp_rep[ind13].get_diagonal_right() == 0) and (tmp_rep[ind14].get_diagonal_right() == 0) and (
+                        tmp_rep[ind15].get_diagonal_right() == 0) and (tmp_rep[ind16].get_diagonal_right() == 0) and (
+                        tmp_rep[ind].get_diagonal_right() == 0)):
+                    pos = np.array([ind, ind13, ind14, ind15, ind16])
+                    return pos
 
     # ------ Search all cels that can be played and add them to list plaable cels ----------------------------------
+
+
     def calculate_playable_cels(self):
         self.clear_rep_playable()
-        tmp_rep = self.rep_cellule.get_rep()
+        tmp_rep = self.get_rep_cels_game()
         n = len(tmp_rep)
         n = int(sqrt(n))
         # --------------------------------- line verticale --------------------------------------
@@ -402,21 +480,35 @@ class Game(Rep_cellules, Rep_line):
                 ind2 = self.convert_ij_to_ind(i + 2, j)
                 ind3 = self.convert_ij_to_ind(i + 3, j)
                 ind4 = self.convert_ij_to_ind(i + 4, j)
-                ind5 = self.convert_ij_to_ind(i + 5, j)
                 try:
-                    if ((tmp_rep[ind4].get_cliqued() == 1) and (tmp_rep[ind1].get_cliqued() == 1) and (
+                    if ((tmp_rep[ind4].get_vertical() == 0) and (tmp_rep[ind1].get_vertical() == 0) and (
+                            tmp_rep[ind2].get_vertical() == 0) and (tmp_rep[ind3].get_vertical() == 0)):
+                        if ((tmp_rep[ind4].get_cliqued() == 1) and (tmp_rep[ind1].get_cliqued() == 1) and (
+                                tmp_rep[ind2].get_cliqued() == 1) and (tmp_rep[ind3].get_cliqued() == 1)):
+
+                            try:
+                                if (tmp_rep[ind].get_vertical() == 0 and self.rep_cellule.get_rep()[ind].get_possible_V()==0):
+                                    self.rep_cellule.get_rep()[ind].set_possible_V(104)
+                                    self.add_cels_playable(tmp_rep[ind])
+
+                            except Exception as inst:
+                                print(type(inst))
+                except Exception as inst:
+                    print(type(inst))
+                ind1 = self.convert_ij_to_ind(i - 1, j)
+                ind2 = self.convert_ij_to_ind(i - 2, j)
+                ind3 = self.convert_ij_to_ind(i - 3, j)
+                ind5 = self.convert_ij_to_ind(i - 4, j)
+                try:
+                    if ((tmp_rep[ind5].get_cliqued() == 1) and (tmp_rep[ind1].get_cliqued() == 1) and (
                             tmp_rep[ind2].get_cliqued() == 1) and (tmp_rep[ind3].get_cliqued() == 1)):
-                        if ((tmp_rep[ind4].get_vertical() == 0) and (tmp_rep[ind1].get_vertical() == 0) and (
+                        if ((tmp_rep[ind5].get_vertical() == 0) and (tmp_rep[ind1].get_vertical() == 0) and (
                                 tmp_rep[ind2].get_vertical() == 0) and (tmp_rep[ind3].get_vertical() == 0)):
                             try:
                                 if (tmp_rep[ind].get_vertical() == 0):
-                                    self.rep_cellule.get_rep()[ind].set_possible_V(104)
-                                    self.cels_playable.append(tmp_rep[ind])
-                                    print(tmp_rep[ind].to_string())
-                                if (tmp_rep[ind5].get_vertical() == 0):
-                                    self.rep_cellule.get_rep()[ind5].set_possible_V(115)
-                                    self.cels_playable.append(tmp_rep[ind5])
-                                    print(tmp_rep[ind5].to_string())
+                                    self.rep_cellule.get_rep()[ind].set_possible_V(115)
+                                    self.add_cels_playable(tmp_rep[ind])
+
                             except Exception as inst:
                                 print(type(inst))
                 except Exception as inst:
@@ -434,7 +526,7 @@ class Game(Rep_cellules, Rep_line):
                                 if (tmp_rep[ind].get_vertical() == 0):
                                     self.rep_cellule.get_rep()[ind].set_possible_V(1113)
                                     self.cels_playable.append(tmp_rep[ind])
-                                    print(tmp_rep[ind].to_string())
+
                             except Exception as inst:
                                 print(type(inst))
                 except Exception as inst:
@@ -452,8 +544,8 @@ class Game(Rep_cellules, Rep_line):
                             try:
                                 if (tmp_rep[ind].get_vertical() == 0):
                                     self.rep_cellule.get_rep()[ind].set_possible_V(1222)
-                                    self.cels_playable.append(tmp_rep[ind])
-                                    print(tmp_rep[ind].to_string())
+                                    self.add_cels_playable(tmp_rep[ind])
+
                             except Exception as inst:
                                 print(type(inst))
                 except Exception as inst:
@@ -471,8 +563,8 @@ class Game(Rep_cellules, Rep_line):
                             try:
                                 if (tmp_rep[ind].get_vertical() == 0):
                                     self.rep_cellule.get_rep()[ind].set_possible_V(1331)
-                                    self.cels_playable.append(tmp_rep[ind])
-                                    print(tmp_rep[ind].to_string())
+                                    self.add_cels_playable(tmp_rep[ind])
+
                             except Exception as inst:
                                 print(type(inst))
                 except Exception as inst:
@@ -483,7 +575,6 @@ class Game(Rep_cellules, Rep_line):
                 ind2 = self.convert_ij_to_ind(i, j + 2)
                 ind3 = self.convert_ij_to_ind(i, j + 3)
                 ind4 = self.convert_ij_to_ind(i, j + 4)
-                ind5 = self.convert_ij_to_ind(i, j + 5)
                 try:
                     if ((tmp_rep[ind4].get_horizontal() == 0) and (tmp_rep[ind1].get_horizontal() == 0) and (
                             tmp_rep[ind2].get_horizontal() == 0) and (tmp_rep[ind3].get_horizontal() == 0)):
@@ -493,17 +584,30 @@ class Game(Rep_cellules, Rep_line):
                                 if (tmp_rep[ind].get_horizontal() == 0):
                                     self.rep_cellule.get_rep()[ind].set_possible_H(204)
                                     self.cels_playable.append(tmp_rep[ind])
-                                    print(tmp_rep[ind].to_string())
 
-                                if (tmp_rep[ind5].get_horizontal() == 0):
-                                    self.rep_cellule.get_rep()[ind5].set_possible_H(215)
-                                    self.cels_playable.append(tmp_rep[ind5])
-                                    print(tmp_rep[ind5].to_string())
                             except Exception as inst:
                                 print(type(inst))
                 except Exception as inst:
                     print(type(inst))
+                ind1 = self.convert_ij_to_ind(i, j - 1)
+                ind2 = self.convert_ij_to_ind(i, j - 2)
+                ind3 = self.convert_ij_to_ind(i, j - 3)
+                ind5 = self.convert_ij_to_ind(i, j - 4)
+                try:
+                    if ((tmp_rep[ind5].get_horizontal() == 0) and (tmp_rep[ind1].get_horizontal() == 0) and (
+                            tmp_rep[ind2].get_horizontal() == 0) and (tmp_rep[ind3].get_horizontal() == 0) and (
+                            tmp_rep[ind].get_horizontal() == 0)):
+                        if ((tmp_rep[ind5].get_cliqued() == 1) and (tmp_rep[ind1].get_cliqued() == 1) and (
+                                tmp_rep[ind2].get_cliqued() == 1) and (tmp_rep[ind3].get_cliqued() == 1)):
+                            try:
+                                if (tmp_rep[ind].get_horizontal() == 0):
+                                    self.rep_cellule.get_rep()[ind].set_possible_H(215)
+                                    self.cels_playable.append(tmp_rep[ind])
 
+                            except Exception as inst:
+                                print(type(inst))
+                except Exception as inst:
+                    print(type(inst))
                 ind1 = self.convert_ij_to_ind(i, j + 1)
                 ind2 = self.convert_ij_to_ind(i, j + 2)
                 ind3 = self.convert_ij_to_ind(i, j + 3)
@@ -518,7 +622,7 @@ class Game(Rep_cellules, Rep_line):
                                 if (tmp_rep[ind].get_horizontal() == 0):
                                     self.rep_cellule.get_rep()[ind].set_possible_H(2113)
                                     self.cels_playable.append(tmp_rep[ind])
-                                    print(tmp_rep[ind].to_string())
+
 
                             except Exception as inst:
                                 print(type(inst))
@@ -539,7 +643,7 @@ class Game(Rep_cellules, Rep_line):
                                 if (tmp_rep[ind].get_horizontal() == 0):
                                     self.rep_cellule.get_rep()[ind].set_possible_H(2222)
                                     self.cels_playable.append(tmp_rep[ind])
-                                    print(tmp_rep[ind].to_string())
+
 
                             except Exception as inst:
                                 print(type(inst))
@@ -560,7 +664,6 @@ class Game(Rep_cellules, Rep_line):
                                 if (tmp_rep[ind].get_horizontal() == 0):
                                     self.rep_cellule.get_rep()[ind].set_possible_H(2331)
                                     self.cels_playable.append(tmp_rep[ind])
-                                    print(tmp_rep[ind].to_string())
 
                             except Exception as inst:
                                 print(type(inst))
@@ -571,7 +674,7 @@ class Game(Rep_cellules, Rep_line):
                 ind2 = self.convert_ij_to_ind(i - 2, j + 2)
                 ind3 = self.convert_ij_to_ind(i - 3, j + 3)
                 ind4 = self.convert_ij_to_ind(i - 4, j + 4)
-                ind5 = self.convert_ij_to_ind(i - 5, j + 5)
+
                 try:
                     if ((tmp_rep[ind4].get_diagonal_left() == 0) and (tmp_rep[ind1].get_diagonal_left() == 0) and (
                             tmp_rep[ind2].get_diagonal_left() == 0) and (tmp_rep[ind3].get_diagonal_left() == 0)):
@@ -581,16 +684,29 @@ class Game(Rep_cellules, Rep_line):
                                 if (self.rep_cellule.get_rep()[ind].get_diagonal_left() == 0):
                                     self.rep_cellule.get_rep()[ind].set_possible_DL(304)
                                     self.cels_playable.append(tmp_rep[ind])
-                                    print(tmp_rep[ind].to_string())
-                                if (tmp_rep[ind5].get_diagonal_left() == 0):
-                                    tmp_rep[ind5].set_possible_DL(315)
 
-                                    self.cels_playable.append(tmp_rep[ind5])
-                                    print(tmp_rep[ind5].to_string())
                             except Exception as inst:
                                 print(type(inst))
                 except Exception as inst:
                     print(type(inst))
+                    ind1 = self.convert_ij_to_ind(i + 1, j - 1)
+                    ind2 = self.convert_ij_to_ind(i + 2, j - 2)
+                    ind3 = self.convert_ij_to_ind(i + 3, j - 3)
+                    ind5 = self.convert_ij_to_ind(i + 4, j - 4)
+                    try:
+                        if ((tmp_rep[ind5].get_diagonal_left() == 0) and (tmp_rep[ind1].get_diagonal_left() == 0) and (
+                                tmp_rep[ind2].get_diagonal_left() == 0) and (tmp_rep[ind3].get_diagonal_left() == 0)):
+                            if (((tmp_rep[ind5].get_cliqued() == 1) and (tmp_rep[ind1].get_cliqued() == 1) and (
+                                    tmp_rep[ind2].get_cliqued() == 1) and (tmp_rep[ind3].get_cliqued() == 1))):
+                                try:
+                                    if (tmp_rep[ind].get_diagonal_left() == 0):
+                                        tmp_rep[ind].set_possible_DL(315)
+                                        self.cels_playable.append(tmp_rep[ind])
+
+                                except Exception as inst:
+                                    print(type(inst))
+                    except Exception as inst:
+                        print(type(inst))
                     ind1 = self.convert_ij_to_ind(i - 1, j + 1)
                     ind2 = self.convert_ij_to_ind(i - 2, j + 2)
                     ind3 = self.convert_ij_to_ind(i - 3, j + 3)
@@ -604,7 +720,6 @@ class Game(Rep_cellules, Rep_line):
                                     if (self.rep_cellule.get_rep()[ind].get_diagonal_left() == 0):
                                         self.rep_cellule.get_rep()[ind].set_possible_DL(3113)
                                         self.cels_playable.append(tmp_rep[ind])
-                                        print(tmp_rep[ind].to_string())
 
                                 except Exception as inst:
                                     print(type(inst))
@@ -623,10 +738,7 @@ class Game(Rep_cellules, Rep_line):
                             try:
                                 if (self.rep_cellule.get_rep()[ind].get_diagonal_left() == 0):
                                     self.rep_cellule.get_rep()[ind].set_possible_DL(3222)
-
                                     self.cels_playable.append(tmp_rep[ind])
-                                    print(tmp_rep[ind].to_string())
-
                             except Exception as inst:
                                 print(type(inst))
 
@@ -645,37 +757,43 @@ class Game(Rep_cellules, Rep_line):
                                 if (self.rep_cellule.get_rep()[ind].get_diagonal_left() == 0):
                                     self.rep_cellule.get_rep()[ind].set_possible_DL(3331)
                                     self.cels_playable.append(tmp_rep[ind])
-                                    print(tmp_rep[ind].to_string())
-
                             except Exception as inst:
                                 print(type(inst))
                 except Exception as inst:
                     print(type(inst))
                 # --------------------------------- line right --------------------------------------
-                ind = self.convert_ij_to_ind(i, j)
+
                 ind1 = self.convert_ij_to_ind(i + 1, j + 1)
                 ind2 = self.convert_ij_to_ind(i + 2, j + 2)
                 ind3 = self.convert_ij_to_ind(i + 3, j + 3)
                 ind4 = self.convert_ij_to_ind(i + 4, j + 4)
-                ind5 = self.convert_ij_to_ind(i + 5, j + 5)
-                tmp_rep_pl = self.get_rep_cels_game()
                 try:
                     if ((tmp_rep[ind4].get_diagonal_right() == 0) and (tmp_rep[ind1].get_diagonal_right() == 0) and (
-                            tmp_rep[ind4].get_diagonal_right() == 0) and (tmp_rep[ind3].get_diagonal_right() == 0)):
-                        if ((tmp_rep[ind].get_cliqued() == 1) and (tmp_rep[ind1].get_cliqued() == 1) and (
+                            tmp_rep[ind2].get_diagonal_right() == 0) and (tmp_rep[ind3].get_diagonal_right() == 0)):
+                        if ((tmp_rep[ind4].get_cliqued() == 1) and (tmp_rep[ind1].get_cliqued() == 1) and (
                                 tmp_rep[ind2].get_cliqued() == 1) and (tmp_rep[ind3].get_cliqued() == 1)):
 
                             if (self.rep_cellule.get_rep()[ind].get_diagonal_right() == 0):
                                 self.rep_cellule.get_rep()[ind].set_possible_DR(404)
                                 self.cels_playable.append(tmp_rep[ind])
-                                print(tmp_rep[ind].to_string())
-                            if (self.rep_cellule.get_rep()[ind5].get_diagonal_right() == 0):
-                                self.rep_cellule.get_rep()[ind5].set_possible_DR(415)
-                                self.cels_playable.append(tmp_rep[ind5])
-                                print(tmp_rep[ind].to_string())
+
                 except Exception as inst:
                     print(type(inst))
 
+                ind1 = self.convert_ij_to_ind(i - 1, j - 1)
+                ind2 = self.convert_ij_to_ind(i - 2, j - 2)
+                ind3 = self.convert_ij_to_ind(i - 3, j - 3)
+                ind5 = self.convert_ij_to_ind(i - 4, j - 4)
+                try:
+                    if ((tmp_rep[ind5].get_diagonal_right() == 0) and (tmp_rep[ind1].get_diagonal_right() == 0) and (
+                            tmp_rep[ind2].get_diagonal_right() == 0) and (tmp_rep[ind3].get_diagonal_right() == 0)):
+                        if ((tmp_rep[ind].get_cliqued() == 1) and (tmp_rep[ind1].get_cliqued() == 1) and (
+                                tmp_rep[ind2].get_cliqued() == 1) and (tmp_rep[ind3].get_cliqued() == 1)):
+                            if (self.rep_cellule.get_rep()[ind].get_diagonal_right() == 0):
+                                self.rep_cellule.get_rep()[ind].set_possible_DR(415)
+                                self.cels_playable.append(tmp_rep[ind])
+                except Exception as inst:
+                    print(type(inst))
                 ind13 = self.convert_ij_to_ind(i - 1, j - 1)
                 ind14 = self.convert_ij_to_ind(i - 2, j - 2)
                 ind15 = self.convert_ij_to_ind(i + 1, j + 1)
@@ -685,14 +803,11 @@ class Game(Rep_cellules, Rep_line):
                             tmp_rep[ind14].get_diagonal_right() == 0) and (
                             tmp_rep[ind15].get_diagonal_right() == 0) and (
                             tmp_rep[ind16].get_diagonal_right() == 0)):
-
                         if ((tmp_rep[ind13].get_cliqued() == 1) and (tmp_rep[ind14].get_cliqued() == 1) and (
                                 tmp_rep[ind15].get_cliqued() == 1) and (tmp_rep[ind16].get_cliqued() == 1)):
                             if (self.rep_cellule.get_rep()[ind].get_diagonal_right() == 0):
                                 self.rep_cellule.get_rep()[ind].set_possible_DR(4222)
-
                                 self.cels_playable.append(tmp_rep[ind])
-                                print(tmp_rep[ind].to_string())
 
                 except Exception as inst:
                     print(type(inst))
@@ -710,7 +825,6 @@ class Game(Rep_cellules, Rep_line):
                             if (self.rep_cellule.get_rep()[ind].get_diagonal_right() == 0):
                                 self.rep_cellule.get_rep()[ind].set_possible_DR(4113)
                                 self.cels_playable.append(tmp_rep[ind])
-                                print(tmp_rep[ind].to_string())
                 except Exception as inst:
                     print(type(inst))
                 ind13 = self.convert_ij_to_ind(i - 1, j - 1)
@@ -727,26 +841,95 @@ class Game(Rep_cellules, Rep_line):
                             if (self.rep_cellule.get_rep()[ind].get_diagonal_right() == 0):
                                 self.rep_cellule.get_rep()[ind].set_possible_DR(4331)
                                 self.cels_playable.append(tmp_rep[ind])
-                                print(tmp_rep[ind].to_string())
                 except Exception as inst:
                     print(type(inst))
 
     # ------ Build line and Add it to rep of line ----------------------------------
     def play_line(self, cel, direction):
-        tmp_rep = self.rep_cellule.get_rep()
-        if (direction == 'v'):
-            tab = self.decodeur_playable_direction_cel(cel, direction)
-        elif (direction == 'h'):
-            tab = self.decodeur_playable_direction_cel(cel, direction)
-        elif (direction == 'dl'):
-            tab = self.decodeur_playable_direction_cel(cel, direction)
-        elif (direction == 'dr'):
-            tab = self.decodeur_playable_direction_cel(cel, direction)
+        tmp_rep = self.get_rep_cels_game()
+        tab = self.decodeur_playable_direction_cel(cel, direction)
         if (tab is not None):
-            print(tab)
-            LINE = Line(tmp_rep[tab[0]], tmp_rep[tab[1]], tmp_rep[tab[2]], tmp_rep[tab[3]], tmp_rep[tab[4]])
-            line = LINE.get_line()
-            self.rep_line.add_line(line)
+            if (direction == 'v'):
+                self.rep_cellule.get_rep()[tab[1]].set_cliqued(1)
+                self.rep_cellule.get_rep()[tab[2]].set_cliqued(1)
+                self.rep_cellule.get_rep()[tab[3]].set_cliqued(1)
+                self.rep_cellule.get_rep()[tab[4]].set_cliqued(1)
+                self.rep_cellule.get_rep()[tab[0]].set_cliqued(1)
+                self.rep_cellule.get_rep()[tab[0]].set_vertical(1)
+                self.rep_cellule.get_rep()[tab[1]].set_vertical(1)
+                self.rep_cellule.get_rep()[tab[2]].set_vertical(1)
+                self.rep_cellule.get_rep()[tab[3]].set_vertical(1)
+                self.rep_cellule.get_rep()[tab[4]].set_vertical(1)
+                self.rep_cellule.get_rep()[tab[0]].set_possible_V(0)
+                self.rep_cellule.get_rep()[tab[1]].set_possible_V(0)
+                self.rep_cellule.get_rep()[tab[2]].set_possible_V(0)
+                self.rep_cellule.get_rep()[tab[3]].set_possible_V(0)
+                self.rep_cellule.get_rep()[tab[4]].set_possible_V(0)
+                LINE = Line(self.rep_cellule.get_rep()[tab[0]], self.rep_cellule.get_rep()[tab[1]], self.rep_cellule.get_rep()[tab[2]], self.rep_cellule.get_rep()[tab[3]], self.rep_cellule.get_rep()[tab[4]])
+                line = LINE.get_line()
+                self.rep_line.add_line(line)
+
+            elif (direction == 'h'):
+                self.rep_cellule.get_rep()[tab[1]].set_cliqued(1)
+                self.rep_cellule.get_rep()[tab[2]].set_cliqued(1)
+                self.rep_cellule.get_rep()[tab[3]].set_cliqued(1)
+                self.rep_cellule.get_rep()[tab[4]].set_cliqued(1)
+                self.rep_cellule.get_rep()[tab[0]].set_cliqued(1)
+                self.rep_cellule.get_rep()[tab[0]].set_horizontal(1)
+                self.rep_cellule.get_rep()[tab[1]].set_horizontal(1)
+                self.rep_cellule.get_rep()[tab[2]].set_horizontal(1)
+                self.rep_cellule.get_rep()[tab[3]].set_horizontal(1)
+                self.rep_cellule.get_rep()[tab[4]].set_horizontal(1)
+                self.rep_cellule.get_rep()[tab[0]].set_possible_H(0)
+                self.rep_cellule.get_rep()[tab[1]].set_possible_H(0)
+                self.rep_cellule.get_rep()[tab[2]].set_possible_H(0)
+                self.rep_cellule.get_rep()[tab[3]].set_possible_H(0)
+                self.rep_cellule.get_rep()[tab[4]].set_possible_H(0)
+                LINE = Line(tmp_rep[tab[0]], tmp_rep[tab[1]], tmp_rep[tab[2]], tmp_rep[tab[3]], tmp_rep[tab[4]])
+                line = LINE.get_line()
+                self.rep_line.add_line(line)
+            elif (direction == 'dl'):
+                self.rep_cellule.get_rep()[tab[1]].set_cliqued(1)
+                self.rep_cellule.get_rep()[tab[2]].set_cliqued(1)
+                self.rep_cellule.get_rep()[tab[3]].set_cliqued(1)
+                self.rep_cellule.get_rep()[tab[4]].set_cliqued(1)
+                self.rep_cellule.get_rep()[tab[0]].set_cliqued(1)
+                self.rep_cellule.get_rep()[tab[0]].set_diagonal_left(1)
+                self.rep_cellule.get_rep()[tab[1]].set_diagonal_left(1)
+                self.rep_cellule.get_rep()[tab[2]].set_diagonal_left(1)
+                self.rep_cellule.get_rep()[tab[3]].set_diagonal_left(1)
+                self.rep_cellule.get_rep()[tab[4]].set_diagonal_left(1)
+                self.rep_cellule.get_rep()[tab[0]].set_possible_DL(0)
+                self.rep_cellule.get_rep()[tab[1]].set_possible_DL(0)
+                self.rep_cellule.get_rep()[tab[2]].set_possible_DL(0)
+                self.rep_cellule.get_rep()[tab[3]].set_possible_DL(0)
+                self.rep_cellule.get_rep()[tab[4]].set_possible_DL(0)
+                LINE = Line(tmp_rep[tab[0]], tmp_rep[tab[1]], tmp_rep[tab[2]], tmp_rep[tab[3]], tmp_rep[tab[4]])
+                line = LINE.get_line()
+                self.rep_line.add_line(line)
+            elif (direction == 'dr'):
+                self.rep_cellule.get_rep()[tab[0]].set_cliqued(1)
+                self.rep_cellule.get_rep()[tab[1]].set_cliqued(1)
+                self.rep_cellule.get_rep()[tab[2]].set_cliqued(1)
+                self.rep_cellule.get_rep()[tab[3]].set_cliqued(1)
+                self.rep_cellule.get_rep()[tab[4]].set_cliqued(1)
+                self.rep_cellule.get_rep()[tab[0]].set_diagonal_right(1)
+                self.rep_cellule.get_rep()[tab[1]].set_diagonal_right(1)
+                self.rep_cellule.get_rep()[tab[2]].set_diagonal_right(1)
+                self.rep_cellule.get_rep()[tab[3]].set_diagonal_right(1)
+                self.rep_cellule.get_rep()[tab[4]].set_diagonal_right(1)
+                self.rep_cellule.get_rep()[tab[0]].set_possible_DR(0)
+                self.rep_cellule.get_rep()[tab[1]].set_possible_DR(0)
+                self.rep_cellule.get_rep()[tab[2]].set_possible_DR(0)
+                self.rep_cellule.get_rep()[tab[3]].set_possible_DR(0)
+                self.rep_cellule.get_rep()[tab[4]].set_possible_DR(0)
+                LINE = Line(tmp_rep[tab[0]], tmp_rep[tab[1]], tmp_rep[tab[2]], tmp_rep[tab[3]], tmp_rep[tab[4]])
+                line = LINE.get_line()
+                self.rep_line.add_line(line)
+
+            print(self.convert_ind_to_ij(tab[0]), '+', self.convert_ind_to_ij(tab[1]), '+',
+                  self.convert_ind_to_ij(tab[2]), '+', self.convert_ind_to_ij(tab[3]), '+',
+                  self.convert_ind_to_ij(tab[4]))
 
     # ------ search cliqued cels and edit their cliqued attribute ----------------------------------
     def if_cliqued(self):
@@ -801,7 +984,6 @@ class Game(Rep_cellules, Rep_line):
                 self.rep_cellule.add_repertoire(cel)
 
     def console(self):
-        self.clear_rep_playable()
         self.calculate_playable_cels()
         self.if_cliqued()
         Croix = [(9, 15), (9, 16), (9, 17), (9, 18), (10, 15), (10, 18), (11, 15), (11, 18), (12, 12), \
@@ -848,6 +1030,13 @@ class Game(Rep_cellules, Rep_line):
                                 print(" .  ", end=" "),
 
 
+def inventaire(nbr_pos_playable, nbr_cels, nbr_occ_cels, nbr_lines):
+    print("Nombre de positions possible à jouer  ----> ", nbr_pos_playable)
+    print("Nombre de cellules ----> ", nbr_cels)
+    print("Nombre de cellules occupées ----> ", nbr_occ_cels)
+    print("Nombre de lignes créer ----> ", nbr_lines)
+
+
 def main():
     start = timeit.default_timer()
     cel = Cellule(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 5)
@@ -863,18 +1052,28 @@ def main():
     game.if_cliqued()
     # ---------- Inventaire du jeu ---------------
     rep = game.get_cels_playable()
-    print("Nombre de positions possible à jouer  ----> ", len(rep))
-    a = rep_cel.get_rep()
-    print("Nombre de cellules ----> ", len(a))
-    print("Nombre de cellules occupées ----> ", len(set(game.get_cels_occuped())))
-    for i in range(0, len(game.get_tmp_cels_playable())):
-        if (game.get_tmp_cels_playable()[i].get_diagonal_right() == 1):
-            print(game.get_tmp_cels_playable()[i].to_string())
-    for i in range(0, len(rep)):
-        game.play_line(rep[i], 'dr')
+    a = game.get_rep()
 
-    print("Nombre de lines créer ----> ", len(game.rep_line.get_rep_line()))
-    end = timeit.default_timer()
+    j=5
+    while(j>0):
+
+        for i in range(0, len(rep)):
+
+            game.play_line(rep[i], 'v')
+            rep = game.get_cels_playable()
+        for h in range(0, len(a)):
+            if (a[h].get_vertical() == 1):
+                print("fvdeferfvevev", a[h].to_string())
+
+        game.calculate_playable_cels()
+        game.console()
+        try:
+            inventaire(len(rep), len(a), len(set(game.get_cels_occuped())), len(game.rep_line.get_rep_line()))
+        except Exception as inst:
+            print(type(inst))
+        end = timeit.default_timer()
+        j = j - 1
     print('Temps execution  ----> ', end - start, '  secondes')
+
 
 main()

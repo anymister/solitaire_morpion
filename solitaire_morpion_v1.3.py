@@ -1325,7 +1325,6 @@ def play_in_ihm(i,j,ind):
         tracer.create_line(xx,yy,xx-54,yy-54,xx+18,yy+18,fill=color5,width=w)
 
 def play():
-    start = timeit.default_timer()
     # Creer une cellule
     cel = Cellule(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 12, 7)
     # initialisation repertoire cellule
@@ -1343,20 +1342,31 @@ def play():
     # Recherche des cellules jouables les ajoutées dans la liste rep
     game.calculate_playable_cels()
     rep_cellules_jouable = game.get_cels_playable()
+    # ajouter la liste des cellules dans rep_cellules
     rep_cellules = game.rep_cellule.get_rep()
-    itération=0
+    # initialisation du nombre de cellules jouable
     nbr_cel_jouables=0
+    # tant qu'il reste des cellules jouables faire
     while (len(rep_cellules_jouable) > 0):
         ancien_nbr_ligne_creer=len(game.rep_line.get_rep_line())
         game.calculate_playable_cels()
         rep_cellules_jouable = game.get_cels_playable()
-        for i in range(0, len(rep_cellules_jouable)): 
-            c=random.choice(rep_cellules_jouable)
-            game.play_line(c, 'v')
-            game.play_line(c, 'h')
-            game.play_line(c, 'dl')
-            game.play_line(c, 'dr')
+        # Parcours de la liste des cellules jouables
+        for i in range(0, len(rep_cellules_jouable)):
+            # Choisir aléatoirement une cellule jouable
+            cellule=random.choice(rep_cellules_jouable)
+            # jouer la cellule dans toutes les directions possibles
+            #vertival
+            game.play_line(cellule, 'v')
+            # Horizental
+            game.play_line(cellule, 'h')
+            # diagonal left
+            game.play_line(cellule, 'dl')
+            # diagonal right
+            game.play_line(cellule, 'dr')
+        # recalcule des cellules jouables    
         game.calculate_playable_cels()
+        # mise à jour du repertoire cellule et afficher en console (optionnel)
         game.console()
         nouveau_nbr_ligne_creer=len(game.rep_line.get_rep_line())
         if(nouveau_nbr_ligne_creer==ancien_nbr_ligne_creer):
@@ -1364,11 +1374,13 @@ def play():
         # Mise à jour de la liste des cellules
         game.read_list()
         try:
+            # afficher en console de l'etat du jeu (optionnel)
             #inventaire(len(rep_cellules_jouable), len(rep_cellules), len(set(game.get_cels_occuped())), nouveau_nbr_ligne_creer)
+            # mise à jour du nombre de cellules jouable
             nbr_cel_jouables=len(rep_cellules_jouable)
         except Exception as inst:
             error="1"
-    itération+=1
+    #retourner le tableau de resultat avec le nombre de ligne creer et les positions qu'il reste à jouer         
     score = np.array([len(game.rep_line.get_rep_line()), nbr_cel_jouables])
     return score
 
@@ -1386,7 +1398,7 @@ def main():
     nbr_iterations=5
     # initialisation du compteur d'itération
     cpt=0
-    # chaque itération est equivalent nombre de lignes creer et qu'il reste 0 cellule jouable
+    # chaque itération est equivalent nombre de lignes creer est max et qu'il reste 0 cellule jouable
     while cpt<nbr_iterations:
         if(max_nbr_lignes_crees<resultat[0]):
             max_nbr_lignes_crees=resultat[0]

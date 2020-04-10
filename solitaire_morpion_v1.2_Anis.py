@@ -1,8 +1,8 @@
-import timeit
 
+import timeit
+import random
 import numpy as np
 from math import *
-from sty import fg, bg, ef, rs
 from tkinter import *
 from tkinter.messagebox import showinfo
 from tkinter.simpledialog import askinteger
@@ -185,6 +185,7 @@ class Game(Rep_cellules, Rep_line):
         self.cels_occuped = []
         self.cels_playable = []
         self.tmp_cels_playable = []
+        self.crash = False
 
     def get_rep_cels_game(self):
         return self.rep_cellule
@@ -260,7 +261,7 @@ class Game(Rep_cellules, Rep_line):
     def decodeur_playable_direction_cel(self, cel, direction):
 
         # --------------------------------- line verticale --------------------------------------
-
+        self.read_list()
         i = cel.get_x()
         j = cel.get_y()
         ind = self.convert_ij_to_ind(i, j)
@@ -367,7 +368,7 @@ class Game(Rep_cellules, Rep_line):
                     pos = np.array([ind, ind1, ind2, ind3, ind4])
                     return pos
 
-                if (code == 2222):
+                if (code == 2331):
                     ind1 = self.convert_ij_to_ind(i, j - 1)
                     ind2 = self.convert_ij_to_ind(i, j - 2)
                     ind3 = self.convert_ij_to_ind(i, j - 3)
@@ -379,7 +380,7 @@ class Game(Rep_cellules, Rep_line):
                         pos = np.array([ind, ind1, ind2, ind3, ind4])
                         return pos
 
-                if (code == 2331):
+                if (code == 2222):
                     ind1 = self.convert_ij_to_ind(i, j - 1)
                     ind2 = self.convert_ij_to_ind(i, j - 2)
                     ind3 = self.convert_ij_to_ind(i, j + 1)
@@ -542,9 +543,9 @@ class Game(Rep_cellules, Rep_line):
 
 
                             except Exception as inst:
-                                print(type(inst))
+                                error="1"
                 except Exception as inst:
-                    print(type(inst))
+                    error="1"
                 ind1 = self.convert_ij_to_ind(i - 1, j)
                 ind2 = self.convert_ij_to_ind(i - 2, j)
                 ind3 = self.convert_ij_to_ind(i - 3, j)
@@ -561,9 +562,9 @@ class Game(Rep_cellules, Rep_line):
 
 
                         except Exception as inst:
-                            print(type(inst))
+                            error="1"
                 except Exception as inst:
-                    print(type(inst))
+                    error="1"
                 ind1 = self.convert_ij_to_ind(i + 1, j)
                 ind2 = self.convert_ij_to_ind(i + 2, j)
                 ind3 = self.convert_ij_to_ind(i + 3, j)
@@ -578,9 +579,9 @@ class Game(Rep_cellules, Rep_line):
                                 self.rep_cellule.get_rep()[ind].set_possible_V(1113)
                                 self.cels_playable.append(tmp_rep[ind])
                         except Exception as inst:
-                            print(type(inst))
+                            error="1"
                 except Exception as inst:
-                    print(type(inst))
+                    error="1"
                 ind1 = self.convert_ij_to_ind(i + 1, j)
                 ind2 = self.convert_ij_to_ind(i + 2, j)
                 ind3 = self.convert_ij_to_ind(i - 2, j)
@@ -596,9 +597,9 @@ class Game(Rep_cellules, Rep_line):
                                 self.rep_cellule.get_rep()[ind].set_possible_V(1222)
                                 self.add_cels_playable(tmp_rep[ind])
                         except Exception as inst:
-                            print(type(inst))
+                            error="1"
                 except Exception as inst:
-                    print(type(inst))
+                    error="1"
                 ind1 = self.convert_ij_to_ind(i + 1, j)
                 ind2 = self.convert_ij_to_ind(i - 2, j)
                 ind3 = self.convert_ij_to_ind(i - 3, j)
@@ -613,9 +614,9 @@ class Game(Rep_cellules, Rep_line):
                                 self.rep_cellule.get_rep()[ind].set_possible_V(1331)
                                 self.add_cels_playable(tmp_rep[ind])
                         except Exception as inst:
-                            print(type(inst))
+                            error="1"
                 except Exception as inst:
-                    print(type(inst))
+                    error="1"
                 # --------------------------------- line horizentale --------------------------------------
                 ind = self.convert_ij_to_ind(i, j)
                 ind1 = self.convert_ij_to_ind(i, j + 1)
@@ -633,19 +634,19 @@ class Game(Rep_cellules, Rep_line):
 
                                 self.rep_cellule.get_rep()[ind].set_possible_H(204)
                                 self.add_cels_playable(tmp_rep[ind])
-                                print(self.convert_ind_to_ij(ind), "==",
-                                      self.rep_cellule.get_rep()[ind].get_horizontal(), self.convert_ind_to_ij(ind1),
-                                      "==", self.rep_cellule.get_rep()[ind1].get_horizontal(),
-                                      self.convert_ind_to_ij(ind2), "==",
-                                      self.rep_cellule.get_rep()[ind2].get_horizontal(), self.convert_ind_to_ij(ind3),
-                                      "==", self.rep_cellule.get_rep()[ind3].get_horizontal(),
-                                      self.convert_ind_to_ij(ind4), "==",
-                                      self.rep_cellule.get_rep()[ind4].get_horizontal())
+                              # print(self.convert_ind_to_ij(ind), "==",
+                                    #  self.rep_cellule.get_rep()[ind].get_horizontal(), self.convert_ind_to_ij(ind1),
+                                     # "==", self.rep_cellule.get_rep()[ind1].get_horizontal(),
+                                      #self.convert_ind_to_ij(ind2), "==",
+                                      #self.rep_cellule.get_rep()[ind2].get_horizontal(), self.convert_ind_to_ij(ind3),
+                                      #"==", self.rep_cellule.get_rep()[ind3].get_horizontal(),
+                                      #self.convert_ind_to_ij(ind4), "==",
+                                      #self.rep_cellule.get_rep()[ind4].get_horizontal())
 
                             except Exception as inst:
-                                print(type(inst))
+                                error="1"
                 except Exception as inst:
-                    print(type(inst))
+                    error="1"
                 ind1 = self.convert_ij_to_ind(i, j - 1)
                 ind2 = self.convert_ij_to_ind(i, j - 2)
                 ind3 = self.convert_ij_to_ind(i, j - 3)
@@ -661,9 +662,9 @@ class Game(Rep_cellules, Rep_line):
                                 self.rep_cellule.get_rep()[ind].set_possible_H(215)
                                 self.add_cels_playable(tmp_rep[ind])
                             except Exception as inst:
-                                print(type(inst))
+                                error="1"
                 except Exception as inst:
-                    print(type(inst))
+                    error="1"
                 ind1 = self.convert_ij_to_ind(i, j + 1)
                 ind2 = self.convert_ij_to_ind(i, j + 2)
                 ind3 = self.convert_ij_to_ind(i, j + 3)
@@ -679,9 +680,9 @@ class Game(Rep_cellules, Rep_line):
                                 self.rep_cellule.get_rep()[ind].set_possible_H(2113)
                                 self.add_cels_playable(tmp_rep[ind])
                             except Exception as inst:
-                                print(type(inst))
+                                error="1"
                 except Exception as inst:
-                    print(type(inst))
+                    error="1"
                 ind1 = self.convert_ij_to_ind(i, j - 1)
                 ind2 = self.convert_ij_to_ind(i, j - 2)
                 ind3 = self.convert_ij_to_ind(i, j - 3)
@@ -694,14 +695,14 @@ class Game(Rep_cellules, Rep_line):
                                 tmp_rep[ind2].get_cliqued() == 1) and (tmp_rep[ind3].get_cliqued() == 1)):
                             try:
 
-                                self.rep_cellule.get_rep()[ind].set_possible_H(2222)
+                                self.rep_cellule.get_rep()[ind].set_possible_H(2331)
                                 self.add_cels_playable(tmp_rep[ind])
 
 
                             except Exception as inst:
-                                print(type(inst))
+                                error="1"
                 except Exception as inst:
-                    print(type(inst))
+                    error="1"
 
                 ind1 = self.convert_ij_to_ind(i, j - 1)
                 ind2 = self.convert_ij_to_ind(i, j - 2)
@@ -710,18 +711,18 @@ class Game(Rep_cellules, Rep_line):
 
                 try:
                     if ((tmp_rep[ind4].get_horizontal() == 0) and (tmp_rep[ind1].get_horizontal() == 0) and (
-                            tmp_rep[ind2].get_horizontal() == 0) and (tmp_rep[ind3].get_horizontal() == 0)):
+                            tmp_rep[ind2].get_horizontal() == 0) and (tmp_rep[ind3].get_horizontal() == 0) and (tmp_rep[ind].get_horizontal() == 0)):
                         if ((tmp_rep[ind4].get_cliqued() == 1) and (tmp_rep[ind1].get_cliqued() == 1) and (
                                 tmp_rep[ind2].get_cliqued() == 1) and (tmp_rep[ind3].get_cliqued() == 1)):
                             try:
 
-                                self.rep_cellule.get_rep()[ind].set_possible_H(2331)
+                                self.rep_cellule.get_rep()[ind].set_possible_H(2222)
                                 self.add_cels_playable(tmp_rep[ind])
 
                             except Exception as inst:
-                                print(type(inst))
+                                error="1"
                 except Exception as inst:
-                    print(type(inst))
+                    error="1"
                     # --------------------------------- line left --------------------------------------
                 ind1 = self.convert_ij_to_ind(i - 1, j + 1)
                 ind2 = self.convert_ij_to_ind(i - 2, j + 2)
@@ -734,14 +735,14 @@ class Game(Rep_cellules, Rep_line):
                             ((tmp_rep[ind4].get_cliqued() == 1) and (tmp_rep[ind1].get_cliqued() == 1) and (
                                     tmp_rep[ind2].get_cliqued() == 1) and (tmp_rep[ind3].get_cliqued() == 1))):
                         try:
-                            if self.rep_cellule.get_rep()[ind].get_diagonal_left() == 0:
+                            if tmp_rep[ind].get_diagonal_left() == 0:
                                 self.rep_cellule.get_rep()[ind].set_possible_DL(304)
                                 self.cels_playable.append(tmp_rep[ind])
 
                         except Exception as inst:
-                            print(type(inst))
+                            error="1"
                 except Exception as inst:
-                    print(type(inst))
+                    error="1"
                     ind1 = self.convert_ij_to_ind(i + 1, j - 1)
                     ind2 = self.convert_ij_to_ind(i + 2, j - 2)
                     ind3 = self.convert_ij_to_ind(i + 3, j - 3)
@@ -758,9 +759,9 @@ class Game(Rep_cellules, Rep_line):
                                     self.cels_playable.append(tmp_rep[ind])
 
                             except Exception as inst:
-                                print(type(inst))
+                                error="1"
                     except Exception as inst:
-                        print(type(inst))
+                        error="1"
                     ind1 = self.convert_ij_to_ind(i - 1, j + 1)
                     ind2 = self.convert_ij_to_ind(i - 2, j + 2)
                     ind3 = self.convert_ij_to_ind(i - 3, j + 3)
@@ -772,15 +773,15 @@ class Game(Rep_cellules, Rep_line):
                                 ((tmp_rep[ind5].get_cliqued() == 1) and (tmp_rep[ind1].get_cliqued() == 1) and (
                                         tmp_rep[ind2].get_cliqued() == 1) and (tmp_rep[ind3].get_cliqued() == 1))):
                             try:
-                                if self.rep_cellule.get_rep()[ind].get_diagonal_left() == 0:
+                                if tmp_rep[ind].get_diagonal_left() == 0:
                                     self.rep_cellule.get_rep()[ind].set_possible_DL(3113)
                                     self.cels_playable.append(tmp_rep[ind])
 
                             except Exception as inst:
-                                print(type(inst))
+                                error="1"
 
                     except Exception as inst:
-                        print(type(inst))
+                        error="1"
                 ind1 = self.convert_ij_to_ind(i - 1, j + 1)
                 ind2 = self.convert_ij_to_ind(i + 2, j - 2)
                 ind3 = self.convert_ij_to_ind(i + 3, j - 3)
@@ -791,14 +792,14 @@ class Game(Rep_cellules, Rep_line):
                         if (((tmp_rep[ind5].get_cliqued() == 1) and (tmp_rep[ind1].get_cliqued() == 1) and (
                                 tmp_rep[ind2].get_cliqued() == 1) and (tmp_rep[ind3].get_cliqued() == 1))):
                             try:
-                                if (self.rep_cellule.get_rep()[ind].get_diagonal_left() == 0):
+                                if (tmp_rep[ind].get_diagonal_left() == 0):
                                     self.rep_cellule.get_rep()[ind].set_possible_DL(3331)
                                     self.cels_playable.append(tmp_rep[ind])
                             except Exception as inst:
-                                print(type(inst))
+                                error="1"
 
                 except Exception as inst:
-                    print(type(inst))
+                    error="1"
                 ind1 = self.convert_ij_to_ind(i + 1, j - 1)
                 ind2 = self.convert_ij_to_ind(i + 2, j - 2)
                 ind3 = self.convert_ij_to_ind(i - 2, j + 2)
@@ -809,13 +810,13 @@ class Game(Rep_cellules, Rep_line):
                             ((tmp_rep[ind5].get_cliqued() == 1) and (tmp_rep[ind1].get_cliqued() == 1) and (
                                     tmp_rep[ind2].get_cliqued() == 1) and (tmp_rep[ind3].get_cliqued() == 1))):
                         try:
-                            if self.rep_cellule.get_rep()[ind].get_diagonal_left() == 0:
+                            if tmp_rep[ind].get_diagonal_left() == 0:
                                 self.rep_cellule.get_rep()[ind].set_possible_DL(3222)
                                 self.cels_playable.append(tmp_rep[ind])
                         except Exception as inst:
-                            print(type(inst))
+                            error="1"
                 except Exception as inst:
-                    print(type(inst))
+                    error="1"
                 # --------------------------------- line right --------------------------------------
 
                 ind1 = self.convert_ij_to_ind(i + 1, j + 1)
@@ -828,12 +829,12 @@ class Game(Rep_cellules, Rep_line):
                         if ((tmp_rep[ind4].get_cliqued() == 1) and (tmp_rep[ind1].get_cliqued() == 1) and (
                                 tmp_rep[ind2].get_cliqued() == 1) and (tmp_rep[ind3].get_cliqued() == 1)):
 
-                            if (self.rep_cellule.get_rep()[ind].get_diagonal_right() == 0):
+                            if (tmp_rep[ind].get_diagonal_right() == 0):
                                 self.rep_cellule.get_rep()[ind].set_possible_DR(404)
                                 self.cels_playable.append(tmp_rep[ind])
 
                 except Exception as inst:
-                    print(type(inst))
+                    error="1"
 
                 ind1 = self.convert_ij_to_ind(i - 1, j - 1)
                 ind2 = self.convert_ij_to_ind(i - 2, j - 2)
@@ -842,13 +843,12 @@ class Game(Rep_cellules, Rep_line):
                 try:
                     if ((tmp_rep[ind5].get_diagonal_right() == 0) and (tmp_rep[ind1].get_diagonal_right() == 0) and (
                             tmp_rep[ind2].get_diagonal_right() == 0) and (tmp_rep[ind3].get_diagonal_right() == 0)):
-                        if ((tmp_rep[ind].get_cliqued() == 1) and (tmp_rep[ind1].get_cliqued() == 1) and (
-                                tmp_rep[ind2].get_cliqued() == 1) and (tmp_rep[ind3].get_cliqued() == 1)) and \
-                                self.rep_cellule.get_rep()[ind].get_diagonal_right() == 0:
+                        if (tmp_rep[ind].get_cliqued() == 1) and (tmp_rep[ind1].get_cliqued() == 1) and (
+                                tmp_rep[ind2].get_cliqued() == 1) and (tmp_rep[ind3].get_cliqued() == 1 and tmp_rep[ind].get_diagonal_right())== 0:
                             self.rep_cellule.get_rep()[ind].set_possible_DR(415)
                             self.cels_playable.append(tmp_rep[ind])
                 except Exception as inst:
-                    print(type(inst))
+                    error="1"
                 ind13 = self.convert_ij_to_ind(i - 1, j - 1)
                 ind14 = self.convert_ij_to_ind(i - 2, j - 2)
                 ind15 = self.convert_ij_to_ind(i + 1, j + 1)
@@ -860,12 +860,12 @@ class Game(Rep_cellules, Rep_line):
                             tmp_rep[ind16].get_diagonal_right() == 0)):
                         if ((tmp_rep[ind13].get_cliqued() == 1) and (tmp_rep[ind14].get_cliqued() == 1) and (
                                 tmp_rep[ind15].get_cliqued() == 1) and (tmp_rep[ind16].get_cliqued() == 1)):
-                            if (self.rep_cellule.get_rep()[ind].get_diagonal_right() == 0):
+                            if (tmp_rep[ind].get_diagonal_right() == 0):
                                 self.rep_cellule.get_rep()[ind].set_possible_DR(4222)
                                 self.cels_playable.append(tmp_rep[ind])
 
                 except Exception as inst:
-                    print(type(inst))
+                    error="1"
                 ind13 = self.convert_ij_to_ind(i - 1, j - 1)
                 ind14 = self.convert_ij_to_ind(i + 3, j - 3)
                 ind15 = self.convert_ij_to_ind(i + 1, j + 1)
@@ -877,7 +877,7 @@ class Game(Rep_cellules, Rep_line):
                             tmp_rep[ind16].get_diagonal_right() == 0)):
                         if ((tmp_rep[ind13].get_cliqued() == 1) and (tmp_rep[ind14].get_cliqued() == 1) and (
                                 tmp_rep[ind15].get_cliqued() == 1) and (tmp_rep[ind16].get_cliqued() == 1)) and \
-                                self.rep_cellule.get_rep()[ind].get_diagonal_right() == 0:
+                                tmp_rep()[ind].get_diagonal_right() == 0:
                             self.rep_cellule.get_rep()[ind].set_cliqued(1)
                             self.rep_cellule.get_rep()[ind].set_diagonal_right(1)
                             self.rep_cellule.get_rep()[ind13].set_diagonal_right(1)
@@ -892,7 +892,7 @@ class Game(Rep_cellules, Rep_line):
                             self.rep_cellule.get_rep()[ind].set_possible_DR(4113)
                             self.cels_playable.append(tmp_rep[ind])
                 except Exception as inst:
-                    print(type(inst))
+                    error="1"
                 ind13 = self.convert_ij_to_ind(i - 1, j - 1)
                 ind14 = self.convert_ij_to_ind(i - 2, j - 2)
                 ind15 = self.convert_ij_to_ind(i - 3, j - 3)
@@ -904,11 +904,11 @@ class Game(Rep_cellules, Rep_line):
                             tmp_rep[ind16].get_diagonal_right() == 0)):
                         if ((tmp_rep[ind13].get_cliqued() == 1) and (tmp_rep[ind14].get_cliqued() == 1) and (
                                 tmp_rep[ind15].get_cliqued() == 1) and (tmp_rep[ind16].get_cliqued() == 1)) and \
-                                self.rep_cellule.get_rep()[ind].get_diagonal_right() == 0:
+                                tmp_rep[ind].get_diagonal_right() == 0:
                             self.rep_cellule.get_rep()[ind].set_possible_DR(4331)
                             self.cels_playable.append(tmp_rep[ind])
                 except Exception as inst:
-                    print(type(inst))
+                    error="1"
 
         self.save_list(tmp_rep)
 
@@ -955,6 +955,7 @@ class Game(Rep_cellules, Rep_line):
             self.rep_cellule.set_cel_rep(cel,i)
 
     def play_line(self, cel, direction):
+        self.read_list()
         tab = self.decodeur_playable_direction_cel(cel, direction)
         if (tab is not None):
             self.rep_cellule.get_rep()[tab[0]].set_line_ind(0)
@@ -963,7 +964,6 @@ class Game(Rep_cellules, Rep_line):
             self.rep_cellule.get_rep()[tab[3]].set_line_ind(0)
             self.rep_cellule.get_rep()[tab[4]].set_line_ind(0)
             if (direction == 'v'):
-                print(tab)
                 self.rep_cellule.get_rep()[tab[1]].set_cliqued(1)
                 self.rep_cellule.get_rep()[tab[2]].set_cliqued(1)
                 self.rep_cellule.get_rep()[tab[3]].set_cliqued(1)
@@ -988,7 +988,6 @@ class Game(Rep_cellules, Rep_line):
                 self.rep_line.add_line(line)
 
             elif (direction == 'h'):
-                print(tab)
                 self.rep_cellule.get_rep()[tab[0]].set_cliqued(1)
                 self.rep_cellule.get_rep()[tab[1]].set_cliqued(1)
                 self.rep_cellule.get_rep()[tab[2]].set_cliqued(1)
@@ -1054,18 +1053,20 @@ class Game(Rep_cellules, Rep_line):
                 line = LINE.get_line()
                 self.rep_line.add_line(line)
 
-            print(self.convert_ind_to_ij(tab[0]), '+', self.convert_ind_to_ij(tab[1]), '+',
-                  self.convert_ind_to_ij(tab[2]), '+', self.convert_ind_to_ij(tab[3]), '+',
-                  self.convert_ind_to_ij(tab[4]))
+            #print(self.convert_ind_to_ij(tab[0]), '+', self.convert_ind_to_ij(tab[1]), '+',
+             #     self.convert_ind_to_ij(tab[2]), '+', self.convert_ind_to_ij(tab[3]), '+',
+              #    self.convert_ind_to_ij(tab[4]))"""
+            self.save_list(self.rep_cellule.get_rep())
 
     # ------ search cliqued cels and edit their cliqued attribute ----------------------------------
     def if_cliqued(self):
-
+""" recherche des points jouer et les ajoutés dans la liste tmp_rep_occ """
+        # tmp_rep correspont au repertoire des cellules du jeu (900)
         tmp_rep = self.rep_cellule.get_rep()
         tmp_rep_occ = self.get_cels_occuped()
         n = len(tmp_rep)
         n = int(sqrt(n))
-
+        # chercher pour tout les points i et j etles covertir en position de la liste et voir pour chaque cellule si son attribu cliqued==1
         for i in range(0, n):
             for j in range(0, n):
                 c = 0
@@ -1083,12 +1084,14 @@ class Game(Rep_cellules, Rep_line):
                         self.cels_occuped.append(tmp_rep[ind])
 
     def clic_cel(self, cel):
+        """ Mettre la cellule cel en jouer """
         i = cel.get_x()
         j = cel.get_y()
         ind = self.convert_ij_to_ind(i, j)
         self.rep_cellule.get_rep()[ind].set_cliqued(1)
 
     def clear_cliqued_cel(self, cel):
+        """ mettre un point jouer en non-jouer """
         i = cel.get_x()
         j = cel.get_y()
         ind = self.convert_ij_to_ind(i, j)
@@ -1130,7 +1133,7 @@ class Game(Rep_cellules, Rep_line):
                 for li, co in Croix:
                     c = 2
                     if ((li == i and co == j) or (tmp_rep[indi].get_cliqued() == 1)):
-                        print(bg.red + ' 0 ' + bg.rs + ' ', end=" "),
+                        #print(bg.red + ' 0 ' + bg.rs + ' ', end=" "),
                         cel = Cellule(0, 0, 0, 0, 1, 0, 0, 0, 0, 0, i, j)
                         self.rep_cellule.set_cel_rep(cel, indi)
                         c = 1
@@ -1142,22 +1145,25 @@ class Game(Rep_cellules, Rep_line):
                         x = self.cels_playable[l].get_x()
                         y = self.cels_playable[l].get_y()
                         if (j == y and i == x):
-                            print(bg.green + " # " + bg.rs, '', end=" "),
+                            #print(bg.green + " # " + bg.rs, '', end=" "),
                             f = 3
                             break
                     if (f == 1):
                         if (j == (n - 1)):
-                            print("\n", i)
+                            k=0
+                            #print("\n", i)
                         else:
                             if (i == 0):
-                                print(" ", j, end=" "),
+                                #print(" ", j, end=" "),
+                                k=0
                             else:
-                                print(" .  ", end=" "),
+                                k=0
+                                #print(" .  ", end=" "),
 
 
 
 
-# ------------------------------         Interface graphique           --------------------------
+"""----- Interface graphique -----"""
         
 Fenetre = Tk()
 Fenetre.title("Morpion solitaire")
@@ -1181,12 +1187,13 @@ labelbonus = Label(Fenetre, textvariable=bns)
 labelbonus.config(bg="white", fg='#02CC1C')
 labelbonus.grid(column=3, row=41)
 
-# ---- mise à jour du score ------
 def score(sc,bn):
+""" Modification du score et les points possible sur l'ihm """
     sco.set(str(sc).zfill(3))
     bns.set(str(bn).zfill(3))
     
 def constructeur():
+""" Construction des points de départs sur l'ihm """
     global Tem, Croix
     Tem, B = [], []
     Croix = [(9, 15), (9, 16), (9, 17), (9, 18), (10, 15), (10, 18), (11, 15), (11, 18), (12, 12), \
@@ -1209,7 +1216,8 @@ def constructeur():
 
     
 def init_jeu(cas):
-    
+""" initialisation de l'ihm """
+
     global bn, sc, flag, xx, yy
     global Tem, curseur, nomfich
     tracer.delete("all")
@@ -1223,9 +1231,8 @@ def init_jeu(cas):
     bns.set(str("").zfill(3))
 
 
-# ---------  Convertir les position de la matrice i et j en leurs equivalent en distance sur l'IHM ------------
 def convert_ij_to_ihmPosition(i,j):
-
+""" Convertir les position de la matrice i et j en leurs equivalent en distance sur l'IHM """
     ci=3*(18)
     cy=1*(18)
     x=((i+2.64)*18)
@@ -1235,71 +1242,95 @@ def convert_ij_to_ihmPosition(i,j):
 
 
 def inventaire(nbr_pos_playable, nbr_cels, nbr_occ_cels, nbr_lines):
+""" Afficher en console les valeurs en entrer """
+
     print("Nombre de positions possible à jouer  ----> ", nbr_pos_playable)
     print("Nombre de cellules ----> ", nbr_cels)
     print("Nombre de cellules occupées ----> ", nbr_occ_cels)
     print("Nombre de lignes créer ----> ", nbr_lines)
 
 def play_in_ihm(i,j,ind):
+""" Mettre le point de coordonnées i et j en rouge sur IHM et dessiner la ligne selon l'indice ind """
     tmp_pos=convert_ij_to_ihmPosition(i,j)
     xx=tmp_pos[0]
     yy=tmp_pos[1]
     tracer.coords(curseur,xx-3,yy-3,xx,yy,xx,yy-3,xx-3,yy,xx-3,yy-3)
     tracer.create_oval(xx-4, yy-4, xx+4, yy+4,fill='red', width=1)
-    w=1
+    w=2
     color1="blue"
     color2="green"
     color3="orange"
     color4="red"
     color5="black"
-    
     # ------------- vertical ---------------
+    """ ind c'est un code qui décris comment la cellulle est jouable """
     if(ind==104):
+        """ 104 veut dire qu'elle est jouable comme suite: X 0 0 0 0 """
         tracer.create_line(xx,yy,xx,yy+72,fill=color1,width=w)
     elif(ind==115):
+        """ 115 correspond à: 0 0 0 0 X """
         tracer.create_line(xx,yy,xx,yy-72,fill=color2,width=w)
     elif(ind==1113):
-        tracer.create_line(xx,yy,xx,yy+18,xx,yy-54,fill=color3,width=w)
+        """ 1113 correspond: 0 X 0 0 0 """
+        tracer.create_line(xx,yy,xx,yy+54,xx,yy-18,fill='blue',width=1)
     elif(ind==1222):
-        tracer.create_line(xx,yy,xx,yy-36,xx,yy+36,fill=color4,width=w)
+        """ 1222 correspond à: 0 0 X 0 0 """
+        tracer.create_line(xx,yy,xx,yy,xx-36,yy+36,fill=color4,width=w)
     elif(ind==1331):
+        """ 1331 correspond à: 0 0 0 X 0 """
         tracer.create_line(xx,yy,xx,yy-54,xx,yy+18,fill=color5,width=w)
     #-------------- horizental  --------------------------
     elif(ind==204):
+        """ Horizentale : X 0 0 0 0 """
         tracer.create_line(xx,yy,xx,yy,xx+72,yy,fill=color1,width=w)
     elif(ind==215):
+        """ Horizentale : 0 0 0 0 X """
         tracer.create_line(xx,yy,xx,yy,xx-72,yy,fill=color2,width=w)
     elif(ind==2113):
+        """ Horizentale : 0 X 0 0 0 """
         tracer.create_line(xx,yy,xx-18,yy,xx+54,yy,fill=color3,width=w)
     elif(ind==2222):
+        """ Horizentale : 0 0 X 0 0 """
         tracer.create_line(xx,yy,xx-36,yy,xx+36,yy,fill=color4,width=w)
     elif(ind==2331):
+        """ Horizentale : 0 0 0 X 0 """
         tracer.create_line(xx,yy,xx+18,yy,xx-54,yy,fill=color5,width=w)
     #-------------  diagonal left -----------------------
     elif(ind==304):
-        tracer.create_line(xx,yy,xx,yy,xx-72,yy+72,fill=color1,width=w)
-    elif(ind==315):
+        """ Diagonale gauche : X 0 0 0 0 """
         tracer.create_line(xx,yy,xx,yy,xx+72,yy-72,fill=color2,width=w)
+    elif(ind==315):
+        """ Diagonale gauche : 0 0 0 0 X """
+        tracer.create_line(xx,yy,xx,yy,xx-72,yy+72,fill=color1,width=w)
     elif(ind==3113):
-        tracer.create_line(xx,yy,xx+18,yy-18,xx-54,yy+54,fill=color3,width=w)
+        """ Diagonale gauche : 0 X 0 0 0 """
+        tracer.create_line(xx,yy,xx-18,yy+18,xx+54,yy-54,fill=color5,width=w)
     elif(ind==3222):
+        """ Diagonale gauche : 0 0 X 0 0 """
         tracer.create_line(xx,yy,xx-36,yy+36,xx+36,yy-36,fill=color4,width=w)
     elif(ind==3331):
-        tracer.create_line(xx,yy,xx-18,yy+18,xx+54,yy-54,fill=color5,width=w)
+        """ Diagonale gauche : 0 0 0 X 0 """
+        tracer.create_line(xx,yy,xx+18,yy-18,xx-54,yy+54,fill=color3,width=w)
+
     #---------------- diagonal right ------------------------
     elif(ind==404):
+        """ Diagonale right : X 0 0 0 0 """
         tracer.create_line(xx,yy,xx,yy,xx+72,yy+72,fill=color1,width=w)
     elif(ind==415):
+        """ Diagonale right : 0 0 0 0 X """
         tracer.create_line(xx,yy,xx,yy,xx-72,yy-72,fill=color2,width=w)
     elif(ind==4113):
+        """ Diagonale right : 0 X 0 0 0 """
         tracer.create_line(xx,yy,xx-18,yy-18,xx+54,yy+54,fill=color3,width=w)
     elif(ind==4222):
+        """ Diagonale right : 0 0 X 0 0 """
         tracer.create_line(xx,yy,xx+36,yy+36,xx-36,yy-36,fill=color4,width=w)
     elif(ind==4331):
+        """ Diagonale right : 0 0 0 X 0 """
         tracer.create_line(xx,yy,xx-54,yy-54,xx+18,yy+18,fill=color5,width=w)
 
 def main():
-    #---------------- init IHM ------------------
+   
     
     #---------------- init moteur ---------------
     start = timeit.default_timer()
@@ -1315,37 +1346,60 @@ def main():
  
       
     # ---------- Inventaire du jeu ---------------
+    game.calculate_playable_cels()
     rep = game.get_cels_playable()
     a = game.rep_cellule.get_rep()
-    j = 15
     itération=0
-    while (j > 0):
-        itération+=1
+    
+    #--------------------------------------------------------
+    while (len(rep) > 0):
+        scores=len(game.rep_line.get_rep_line())
+        
         game.calculate_playable_cels()
         rep = game.get_cels_playable()
+        possi=len(rep)
+        for i in range(0, len(rep)): 
+            c=random.choice(rep)
+            game.play_line(c, 'v')
+            game.play_line(c, 'h')
+            game.play_line(c, 'dl')
+            game.play_line(c, 'dr')
 
-        for i in range(0, len(rep)):
-            game.play_line(rep[i], 'v')
-            game.play_line(rep[i], 'h')
-            game.play_line(rep[i], 'dl')
-            game.play_line(rep[i], 'dr')
-
+        
         game.calculate_playable_cels()
-
         game.console()
-        try:
-            score(len(game.rep_line.get_rep_line()),len(rep))
-            inventaire(len(rep), len(a), len(set(game.get_cels_occuped())), len(game.rep_line.get_rep_line()))
-        except Exception as inst:
-            print(type(inst))
-        print("itération numéro :", itération)
-        j = j - 1
+        scr=len(game.rep_line.get_rep_line())
+        if(scr==scores):
+            break
+        
+       
         game.read_list()
-        end = timeit.default_timer()
-
+        try:
+            k=0
+            #inventaire(len(rep), len(a), len(set(game.get_cels_occuped())), len(game.rep_line.get_rep_line()))
+        except Exception as inst:
+            error="1"
+    itération+=1
+    sco = np.array([len(game.rep_line.get_rep_line()), itération])
+    
+    end = timeit.default_timer()
+    return sco
 
     print('Temps execution  ----> ', end - start, '  secondes')
 
-    
+print("\n running ...\n") 
 init_jeu(0)
-main()
+scores=main()
+max_scr=0
+nbr_it=5
+cpt=0
+while cpt<nbr_it:
+    if(max_scr<scores[0]):
+        max_scr=scores[0]
+        score(scores[0],0)
+
+    print(cpt, " score : ", scores[0]," best score : ",max_scr)    
+    scores=main()
+    cpt+=1
+mainloop()       
+

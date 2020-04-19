@@ -2,6 +2,7 @@
 import timeit
 import random
 import numpy as np
+from sty import fg, bg, ef, rs
 from math import *
 from tkinter import *
 from tkinter.messagebox import showinfo
@@ -11,22 +12,33 @@ import numpy as np
 
 class Cellule:
     """ Classe cellule représente une case du jeu """
-    # vertical,horizontal,diagonal_left,diagonal_right et cliqued SONT DES BOOL
+    # vertical,horizontal,diagonal_left,diagonal_right et cliqued peuvent prendre sois 0 ou 1
     def __init__(self, vertical, horizontal, diagonal_left, diagonal_right, cliqued, line_ind, possible_V, possible_H,
                  possible_DL, possible_DR, x, y):
+        # 1 si la cellule est jouer verticalement, 0 sinon
         self.vertical = vertical
+        # 1 si la cellule est jouer en diagonal gauche, 0 sinon
         self.diagonal_left = diagonal_left
+        # 1 si la cellule est jouer en diagonal droite, 0 sinon
         self.diagonal_right = diagonal_right
+        # 1 si la cellule est jouer horizentalement, 0 sinon
         self.horizontal = horizontal
+        # coordonnée i et j de la cellule
         self.x = x
         self.y = y
+        #optionnel 
         self.line_ind = line_ind
+        # 1 si la cellule est cliqué
         self.cliqued = cliqued
+        # 104 ou 115 ou 1113 ou 1331 ou 1222 si elle est jouable verticalement, 0 sinon
         self.possible_V = possible_V
+        # 204 ou 215 ou 2113 ou 2331 ou 2222 si elle est jouable horizentalement, 0 sinon
         self.possible_H = possible_H
+        # 304 ou 315 ou 3113 ou 3331 ou 3222 si elle est jouable en diagonal gauche (left), 0 sinon
         self.possible_DL = possible_DL
+        # 404 ou 415 ou 4113 ou 4331 ou 4222 si elle est jouable diagonal droite (right), 0 sinon
         self.possible_DR = possible_DR
-
+    # --- getter and setter ---
     def set_possible_V(self, val):
         self.possible_V = val
 
@@ -109,15 +121,17 @@ class Cellule:
 
 
 class Rep_cellules(Cellule):
-    """ Classe repertoire représentant le repetoire des cellule du jeu """
+    """ Classe repertoire représentant le repetoire des cellules du jeu """
     def __init__(self, cellule):
         self.cellule = cellule
+        # Liste des cellules
         self.rep_cel = []
 
     def add_repertoire(self, cel):
+        """ Ajouter une cellule à la liste rep_cel """
         tmp_rep = self.rep_cel
         tmp_rep.append(cel)
-
+    # --- getter and setter 
     def get_rep(self):
         return self.rep_cel
 
@@ -125,22 +139,26 @@ class Rep_cellules(Cellule):
         self.rep_cel = rep
 
     def clear_rep(self):
+        """ Effacer la liste des cellules """
         self.rep_cel.clear()
 
     def set_cel_rep(self, cel, ind):
+        """ Modifier une cellule avec son indice dans la liste"""
         self.rep_cel[ind] = cel
         
 class Line(Cellule):
-    """ classe Ligne  """
+    """ classe line represente une ligne jouer dans le jeu """
     def __init__(self, cel1, cel2, cel3, cel4, cel5):
+        # initialisation de la liste des cellules de la ligne
         self.line_cels = []
         self.line_cels.clear()
+        # Ajouter les cellules de la ligne jouer à la liste
         self.line_cels.append(cel1)
         self.line_cels.append(cel2)
         self.line_cels.append(cel3)
         self.line_cels.append(cel4)
         self.line_cels.append(cel5)
-
+    # -- getter and setter --
     def get_line(self):
         return self.line_cels
 
@@ -156,29 +174,37 @@ class Line(Cellule):
 
 
 class Rep_line(Line):
-    """ Classe Repertoire des lignes """
+    """ Classe Rep_line represente le repertoire des lignes """
     def __init__(self, line):
         self.line = line
+        # initialisation de la liste qui contient les lignes
         self.rep_line = []
 
     def add_line(self, l):
+        """ Ajouter une ligne à la liste """
         self.rep_line.append(l)
 
     def get_rep_line(self):
         return self.rep_line
 
     def clear_rep(self):
+        """ Effacer le repertoire """
         self.rep_line.clear()
 
 class Game(Rep_cellules, Rep_line):
+    """ La classe Game contient le repértoire des cellules et lignes ainsi que les méthodes qui permetent de jouer """
     def __init__(self, rep_cellule, rep_line):
         self.rep_line = rep_line
         self.rep_cellule = rep_cellule
+        # Initialisation de la liste des cellules cliquées
         self.cels_occuped = []
+        # Initialisation de la liste des cellules jouables
         self.cels_playable = []
+        # (optionnel)
         self.tmp_cels_playable = []
+        # s'il reste aucune cellule jouable
         self.crash = False
-
+    # --- getter and setter ---
     def get_rep_cels_game(self):
         return self.rep_cellule
 
@@ -199,9 +225,6 @@ class Game(Rep_cellules, Rep_line):
 
     def add_cels_playable(self, cel):
         self.cels_playable.append(cel)
-
-    def calculate_best_cel_toPlay(self):
-        return 0
 
     def convert_ind_to_ij(self, ind):
         """ (Optionnel) convertir l'indice de la cellules dans la liste des cellules en des position i et j"""
@@ -239,8 +262,7 @@ class Game(Rep_cellules, Rep_line):
 
     def decodeur_playable_direction_cel(self, cel, direction):
         """ Decoder comment la cellule en entrer 'cel' est jouable selon son attribut possible_ V ou H ou DL ou DR et retourner les indices de la ligne """
-        # -------------------line verticale -----------------------
-        # lire le fichier solitaire.txt pour ajouter les 900 cellules dans la liste rep_cel ceci afin d'assurer la mise à jour des modifications
+        # lire le fichier solitaire.txt pour ajouter les 900 cellules dans la liste rep_cel ceci afin d'assurer la mise à jour des modifications de chaque cellule
         self.read_list()
         i = cel.get_x()
         j = cel.get_y()
@@ -272,7 +294,9 @@ class Game(Rep_cellules, Rep_line):
         # 4113: 0X000
         # 4331: 000X0
         # 4222: 00X00
+        
         if (direction == 'v'):
+                # -------------------line verticale --------------------------
             code = cel.get_possible_V()
             ind1 = self.convert_ij_to_ind(i + 1, j)
             ind2 = self.convert_ij_to_ind(i + 2, j)
@@ -335,7 +359,7 @@ class Game(Rep_cellules, Rep_line):
                     play_in_ihm(j,i,code)
                     pos = np.array([ind, ind1, ind2, ind3, ind5])
                     return pos
-        # --------------------------------- line horizentale --------------------------------------
+        # ----------------- line horizentale --------------------------------------
         elif direction == "h":
             code = cel.get_possible_H()
             ind1 = self.convert_ij_to_ind(i, j + 1)
@@ -395,7 +419,7 @@ class Game(Rep_cellules, Rep_line):
                         pos = np.array([ind, ind1, ind2, ind3, ind4])
                         return pos
 
-            # --------------------------------- line left --------------------------------------
+            # -------------------- line left --------------------------------------
         elif (direction == 'dl'):
             code = cel.get_possible_DL()
             ind1 = self.convert_ij_to_ind(i - 1, j + 1)
@@ -455,7 +479,7 @@ class Game(Rep_cellules, Rep_line):
                     play_in_ihm(j,i,code)
                     pos = np.array([ind, ind1, ind2, ind3, ind5])
                     return pos
-        # --------------------------------- line right --------------------------------------
+        # ------------------ line right --------------------------------------
         if (direction == 'dr'):
             code = cel.get_possible_DR()
             ind1 = self.convert_ij_to_ind(i + 1, j + 1)
@@ -910,6 +934,7 @@ class Game(Rep_cellules, Rep_line):
     def save_list(self, liste):
         """ Enregistrer les cellules avec leurs valeurs dans le fichier solitaire.txt"""
         f = open('solitaire.txt', "w+")
+        # Chaque ligne contiendra une cellule
         if (len(liste) != 0):
             for i in range(len(liste)):
                 f.write("%d," % liste[i].get_vertical())
@@ -931,34 +956,36 @@ class Game(Rep_cellules, Rep_line):
         """ Lire le fichier solitaire.txt qui contient toutes les cellules et les ajoutées au répétoire cellule 'rep_cellules' """
         lines=[]
         # Chaque ligne contient toutes les valeurs d'une cellule
-        with open('solitaire.txt') as f:
-            lines = f.readlines()
-        f.close()
+        with open('solitaire.txt') as file:
+            lines = file.readlines()
+        file.close()
         for i in range(0,len(lines)):
-            a=lines[i]
-            a1=a.split(",")
+            line=lines[i]
+            cel_as_tab=line.split(",")
             cel=Cellule(0,0,0,0,0,0,0,0,0,0,0,0)
-            cel.set_vertical(int(a1[0]))
-            cel.set_horizontal(int(a1[1]))
-            cel.set_diagonal_left(int(a1[2]))
-            cel.set_diagonal_right(int(a1[3]))
-            cel.set_cliqued(int(a1[4]))
-            cel.set_possible_V(int(a1[5]))
-            cel.set_possible_H(int(a1[6]))
-            cel.set_line_ind(int(a1[7]))
-            cel.set_possible_DL(int(a1[8]))
-            cel.set_possible_DR(int(a1[9]))
-            cel.set_x(int(a1[10]))
-            cel.set_y(int(a1[11]))
+            cel.set_vertical(int(cel_as_tab[0]))
+            cel.set_horizontal(int(cel_as_tab[1]))
+            cel.set_diagonal_left(int(cel_as_tab[2]))
+            cel.set_diagonal_right(int(cel_as_tab[3]))
+            cel.set_cliqued(int(cel_as_tab[4]))
+            cel.set_possible_V(int(cel_as_tab[5]))
+            cel.set_possible_H(int(cel_as_tab[6]))
+            cel.set_line_ind(int(cel_as_tab[7]))
+            cel.set_possible_DL(int(cel_as_tab[8]))
+            cel.set_possible_DR(int(cel_as_tab[9]))
+            cel.set_x(int(cel_as_tab[10]))
+            cel.set_y(int(cel_as_tab[11]))
+            # modifier chaque cellule dans le repertoire cellule avec son indice dans la liste
             self.rep_cellule.set_cel_rep(cel,i)
 
     def play_line(self, cel, direction):
-        """ Creer une ligne (Ajouter ligne à rep_lines) et qui passe par la cellule cel et
-mettre toutes les cellule de cette ligne en jouer dans la direction choisie"""
+        """ Creer une ligne (Ajouter line à rep_lines) qui passe par la cellule cel et
+mettre toutes les cellule de cette ligne en jouées dans la direction choisie"""
+        # Mise à jour du répertoire cellules
         self.read_list()
         # Décoder comment la cellule 'cel' est jouable: X0000 ou 0X000 ou 00X00 ou 000X0 ou 0000X
         tab = self.decodeur_playable_direction_cel(cel, direction)
-        # 'tab' contient les indices dans la liste 'rep_cellule' des cellules de la ligne qu'on veut jouer  
+        # 'tab' contient les indices des cellules dans la liste 'rep_cellules' de la ligne qu'on veut jouer  
         if (tab is not None):
             self.rep_cellule.get_rep()[tab[0]].set_line_ind(0)
             self.rep_cellule.get_rep()[tab[1]].set_line_ind(0)
@@ -966,6 +993,7 @@ mettre toutes les cellule de cette ligne en jouer dans la direction choisie"""
             self.rep_cellule.get_rep()[tab[3]].set_line_ind(0)
             self.rep_cellule.get_rep()[tab[4]].set_line_ind(0)
             if (direction == 'v'):
+                # si la direction est vertical mettre les 5 cellules de la lignes en cliquées et jouées verticalement 
                 self.rep_cellule.get_rep()[tab[1]].set_cliqued(1)
                 self.rep_cellule.get_rep()[tab[2]].set_cliqued(1)
                 self.rep_cellule.get_rep()[tab[3]].set_cliqued(1)
@@ -977,18 +1005,18 @@ mettre toutes les cellule de cette ligne en jouer dans la direction choisie"""
                 self.rep_cellule.get_rep()[tab[2]].set_vertical(1)
                 self.rep_cellule.get_rep()[tab[3]].set_vertical(1)
                 self.rep_cellule.get_rep()[tab[4]].set_vertical(1)
-
+                # mettre les 5 cellule, possible de jouer verticalement à 0
                 self.rep_cellule.get_rep()[tab[0]].set_possible_V(0)
                 self.rep_cellule.get_rep()[tab[1]].set_possible_V(0)
                 self.rep_cellule.get_rep()[tab[2]].set_possible_V(0)
                 self.rep_cellule.get_rep()[tab[3]].set_possible_V(0)
                 self.rep_cellule.get_rep()[tab[4]].set_possible_V(0)
-                # creer la ligne 
+                # creer la ligne avec les 5 cellules 
                 LINE = Line(self.rep_cellule.get_rep()[tab[0]], self.rep_cellule.get_rep()[tab[1]],
                             self.rep_cellule.get_rep()[tab[2]], self.rep_cellule.get_rep()[tab[3]],
                             self.rep_cellule.get_rep()[tab[4]])
                 line = LINE.get_line()
-                # ajouter la ligne crée dans le répértoire des lignes 'rep_line'
+                # ajouter la ligne crée 'line' dans le répértoire des lignes 'rep_line'
                 self.rep_line.add_line(line)
 
             elif (direction == 'h'):
@@ -1107,8 +1135,8 @@ mettre toutes les cellule de cette ligne en jouer dans la direction choisie"""
             for j in range(0, lin):
                 cel = Cellule(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, i, j)
                 self.rep_cellule.add_repertoire(cel)
-
-    def console(self):
+                
+    def initialisation_first_cels(self):
         """ Ajouter tout les points jouer au repértoire cellule et peu aussi afficher (optionnel) l'etat du jeu en console"""
         # tmp_rep -> repértoire des cellule du jeu
         tmp_rep = self.rep_cellule.get_rep()
@@ -1135,6 +1163,33 @@ mettre toutes les cellule de cette ligne en jouer dans la direction choisie"""
                         self.rep_cellule.set_cel_rep(cel, indi)
                         c = 1
                         break
+    def console(self):
+        """ Affichage de l'etat du jeu en console """
+        # tmp_rep -> repértoire des cellule du jeu
+        tmp_rep = self.rep_cellule.get_rep()
+        self.if_cliqued()
+        # les coordonnées des points du début du jeu
+        Croix = [(9, 15), (9, 16), (9, 17), (9, 18), (10, 15), (10, 18), (11, 15), (11, 18), (12, 12), \
+                 (12, 13), (12, 14), (12, 15), (12, 18), (12, 19), (12, 20), (12, 21), (13, 12), (13, 21), \
+                 (14, 12), (14, 21), (15, 12), (15, 13), (15, 14), (15, 15), (15, 18), (15, 19), (15, 20), \
+                 (15, 21), (16, 15), (16, 18), (17, 15), (17, 18), (18, 15), (18, 16), (18, 17), (18, 18)]
+        
+        n = len(tmp_rep)
+        n = int(sqrt(n))
+        for i in range(0, n):
+            for j in range(0, n):
+                indi = self.convert_ij_to_ind(i, j)
+                ce = tmp_rep[indi]
+                xx = ce.get_x()
+                yy = ce.get_y()
+                for li, co in Croix:
+                    c = 2
+                    if ((li == i and co == j) or (tmp_rep[indi].get_cliqued() == 1)):
+                        print(bg.red + ' 0 ' + bg.rs + ' ', end=" "),
+                        cel = Cellule(0, 0, 0, 0, 1, 0, 0, 0, 0, 0, i, j)
+                        self.rep_cellule.set_cel_rep(cel, indi)
+                        c = 1
+                        break
                 f = 0
                 if (c == 2):
                     # afficher en console en vert les points jouables 
@@ -1143,20 +1198,21 @@ mettre toutes les cellule de cette ligne en jouer dans la direction choisie"""
                         x = self.cels_playable[l].get_x()
                         y = self.cels_playable[l].get_y()
                         if (j == y and i == x):
-                            #print(bg.green + " # " + bg.rs, '', end=" "),
+                            print(bg.green + " # " + bg.rs, '', end=" "),
                             f = 3
                             break
                     if (f == 1):
                         if (j == (n - 1)):
                             k=0
-                            #print("\n", i)
+                            print("\n", i)
                         else:
                             if (i == 0):
-                                #print(" ", j, end=" "),
+                                print(" ", j, end=" "),
                                 k=0
                             else:
                                 k=0
-                                #print(" .  ", end=" "),
+                                print(" .  ", end=" "),
+                                
 
 """----- Interface graphique -----"""
         
@@ -1226,6 +1282,86 @@ def init_jeu(cas):
     bns.set(str("").zfill(3))
 
 
+class Player(object):
+
+    def __init__(self, game):
+        self.x = x - x % 20
+        self.y = y - y % 20
+        self.position = []
+        self.position.append([self.x, self.y])
+        self.food = 1
+        self.eaten = False
+        self.x_change = 20
+        self.y_change = 0
+
+    def update_position(self, x, y):
+        if self.position[-1][0] != x or self.position[-1][1] != y:
+            if self.food > 1:
+                for i in range(0, self.food - 1):
+                    self.position[i][0], self.position[i][1] = self.position[i]
+            self.position[-1][0] = x
+            self.position[-1][1] = y
+
+    def do_move(self, move, x, y, game, food,agent):
+        move_array = [self.x_change, self.y_change]
+        if self.eaten:
+            self.position.append([self.x, self.y])
+            self.eaten = False
+            self.food = self.food + 1
+        if np.array_equal(move ,[1, 0, 0]):
+            move_array = self.x_change, self.y_change
+        elif np.array_equal(move,[0, 1, 0]) and self.y_change == 0:  # right - going horizontal
+            move_array = [0, self.x_change]
+        elif np.array_equal(move,[0, 1, 0]) and self.x_change == 0:  # right - going vertical
+            move_array = [-self.y_change, 0]
+        elif np.array_equal(move, [0, 0, 1]) and self.y_change == 0:  # left - going horizontal
+            move_array = [0, -self.x_change]
+        elif np.array_equal(move,[0, 0, 1]) and self.x_change == 0:  # left - going vertical
+            move_array = [self.y_change, 0]
+        self.x_change, self.y_change = move_array
+        self.x = x + self.x_change
+        self.y = y + self.y_change
+
+        if self.x < 20 or self.x > game.game_width-40 or self.y < 20 or self.y > game.game_height-40 or [self.x, self.y] in self.position:
+            game.crash = True
+        eat(self, food, game)
+
+        self.update_position(self.x, self.y)
+
+    def display_player(self, x, y, food, game):
+        self.position[-1][0] = x
+        self.position[-1][1] = y
+
+        if game.crash == False:
+            for i in range(food):
+                x_temp, y_temp = self.position[len(self.position) - 1 - i]
+                game.gameDisplay.blit(self.image, (x_temp, y_temp))
+
+            update_screen()
+        else:
+            pygame.time.wait(300)
+
+
+class Food(object):
+
+    def __init__(self):
+        self.x_food = 240
+        self.y_food = 200
+
+    def food_coord(self, game, player):
+        len_list_playable_cels=len(game.get_cels_playable())
+        indice_rand=randit(len_list_playable_cels)
+        self.x_food = game.get_cels_playable()[indice_rand].get_x()
+        self.y_food = game.get_cels_playable()[indice_rand].get_y()
+        if [self.x_food, self.y_food] not in player.position:
+            return self.x_food, self.y_food
+        else:
+            self.food_coord(game,player)
+
+    def display_food(self, x, y, game):
+        game.gameDisplay.blit(self.image, (x, y))
+        update_screen()
+
 def convert_ij_to_ihmPosition(i,j):
     """ Convertir les position de la matrice i et j en leurs equivalent en distance sur l'IHM """
     ci=3*(18)
@@ -1238,7 +1374,7 @@ def convert_ij_to_ihmPosition(i,j):
 
 def inventaire(nbr_pos_playable, nbr_cels, nbr_occ_cels, nbr_lines):
     """ Afficher en console les valeurs en entrer """
-
+    
     print("Nombre de positions possible à jouer  ----> ", nbr_pos_playable)
     print("Nombre de cellules ----> ", nbr_cels)
     print("Nombre de cellules occupées ----> ", nbr_occ_cels)
@@ -1246,17 +1382,23 @@ def inventaire(nbr_pos_playable, nbr_cels, nbr_occ_cels, nbr_lines):
 
 def play_in_ihm(i,j,ind):
     """ Mettre le point de coordonnées i et j en rouge sur IHM et dessiner la ligne selon l'indice ind """
+    # convertir les position i et j en distances sur l'ihm
     tmp_pos=convert_ij_to_ihmPosition(i,j)
     xx=tmp_pos[0]
     yy=tmp_pos[1]
+    # placer le curseur dans les positions i et j correspendant sur l'ihm
     tracer.coords(curseur,xx-3,yy-3,xx,yy,xx,yy-3,xx-3,yy,xx-3,yy-3)
+    # Créer un point rouge sur le curseur
     tracer.create_oval(xx-4, yy-4, xx+4, yy+4,fill='red', width=1)
+    # largeur de la ligne sur l'ihm
     w=2
+    # couleurs des lignes sur l'ihm
     color1="blue"
     color2="green"
     color3="orange"
     color4="red"
     color5="black"
+    # tracer la ligne sur l'ihm avec les mesures corrependantes selon le code 'ind' de la cellule
     # ------------- vertical ---------------
     """ ind c'est un code qui décris comment la cellulle est jouable """
     if(ind==104):
@@ -1324,49 +1466,113 @@ def play_in_ihm(i,j,ind):
         """ Diagonale right : 0 0 0 X 0 """
         tracer.create_line(xx,yy,xx-54,yy-54,xx+18,yy+18,fill=color5,width=w)
 
+def initialize_game(player, game, food, agent):
+    state_init1 = agent.get_state(game, player, food)  # [0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0]
+    action = [1, 0, 0]
+    player.do_move(action, player.x, player.y, game, food, agent)
+    state_init2 = agent.get_state(game, player, food)
+    reward1 = agent.set_reward(player, game.crash)
+    agent.remember(state_init1, action, reward1, state_init2, game.crash)
+    agent.replay_new(agent.memory)
 def play():
+    """-----------------------Reseau ----------------------
+    pygame.init()
+    agent = DQNAgent()
+    counter_games = 0
+    score_plot = []
+    counter_plot =[]
+    record = 0
+    # Perform first move
+    initialize_game(player1, game, food1, agent)
+    if display_option:
+            display(player1, food1, game, record)
+     while not game.crash:
+            #agent.epsilon is set to give randomness to actions
+            agent.epsilon = 80 - counter_games
+            
+            #get old state
+            state_old = agent.get_state(game, player1, food1)
+            
+            #perform random actions based on agent.epsilon, or choose the action
+            # reseau ----
+            if randint(0, 200) < agent.epsilon:
+                final_move = to_categorical(randint(0, 2), num_classes=3)
+            else:
+                # predict action based on the old state
+                prediction = agent.model.predict(state_old.reshape((1,11)))
+                final_move = to_categorical(np.argmax(prediction[0]), num_classes=3)
+                
+            #perform new move and get new state
+            player1.do_move(final_move, player1.x, player1.y, game, food1, agent)
+            state_new = agent.get_state(game, player1, food1)
+            
+            #set treward for the new state
+            reward = agent.set_reward(player1, game.crash)
+            
+            #train short memory base on the new action and state
+            agent.train_short_memory(state_old, final_move, reward, state_new, game.crash)
+            
+            # store the new data into a long term memory
+            agent.remember(state_old, final_move, reward, state_new, game.crash)
+            record = get_record(game.score, record)
+            if display_option:
+                display(player1, food1, game, record)
+                pygame.time.wait(speed)
+        
+        agent.replay_new(agent.memory)
+        counter_games += 1
+        print('Game', counter_games, '      Score:', game.score)
+        score_plot.append(game.score)
+        counter_plot.append(counter_games)
+    agent.model.save_weights('weights.hdf5')
+    plot_seaborn(counter_plot, score_plot)
+    """
+    #--------------------------------------------------------
     # Creer une cellule
     cel = Cellule(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 12, 7)
-    # initialisation repertoire cellule
+    # initialisation repertoire des cellules
     rep_cel = Rep_cellules(cel)
-    # initalisation classe ligne    
+    # initalisation classe line    
     line = Line(cel, cel, cel, cel, cel)
-    # initialisation du repertoire ligne
+    # initialisation du repertoire lines
     rep_line = Rep_line(line)
-    # initialisation de Game avec un repertoire cellule et repertoire ligne
+    # initialisation de Game avec un repertoire cellule et un repertoire ligne
     game = Game(rep_cel, rep_line)
     # donner nombre de cellule en largeur et longueur
     game.initialisation(30, 30)
     # Mettre les cellules du début du jeu en 'cliqued' et afficher en console (optionnel)
-    game.console()      
+    game.initialisation_first_cels()      
     # Recherche des cellules jouables les ajoutées dans la liste rep
     game.calculate_playable_cels()
-    rep_cellules_jouable = game.get_cels_playable()
+    # ajouter la liste des cellules jouables dans le repertoire 'rep_cellules_jouable'
+    rep_cellules_jouables = game.get_cels_playable()
     # ajouter la liste des cellules dans rep_cellules
     rep_cellules = game.rep_cellule.get_rep()
     # initialisation du nombre de cellules jouable
-    nbr_cel_jouables=0
+    tmp_nbr_cel_jouables=0
     # tant qu'il reste des cellules jouables faire
-    while (len(rep_cellules_jouable) > 0):
+    while (len(rep_cellules_jouables) > 0):
         ancien_nbr_ligne_creer=len(game.rep_line.get_rep_line())
         game.calculate_playable_cels()
-        rep_cellules_jouable = game.get_cels_playable()
+        rep_cellules_jouables = game.get_cels_playable()
         # Parcours de la liste des cellules jouables
-        for i in range(0, len(rep_cellules_jouable)):
+        for i in range(0, len(rep_cellules_jouables)):
             # Choisir aléatoirement une cellule jouable
-            cellule=random.choice(rep_cellules_jouable)
+            cellule=random.choice(rep_cellules_jouables)
             # jouer la cellule dans toutes les directions possibles
-            #vertival
+            # Vertival
             game.play_line(cellule, 'v')
             # Horizental
             game.play_line(cellule, 'h')
-            # diagonal left
+            # Diagonal left
             game.play_line(cellule, 'dl')
-            # diagonal right
+            # Diagonal right
             game.play_line(cellule, 'dr')
         # recalcule des cellules jouables    
         game.calculate_playable_cels()
-        # mise à jour du repertoire cellule et afficher en console (optionnel)
+        # mise à jour du repertoire cellule
+        game.initialisation_first_cels()
+        # afficher l'etat du jeu en console (optionnel)
         game.console()
         nouveau_nbr_ligne_creer=len(game.rep_line.get_rep_line())
         if(nouveau_nbr_ligne_creer==ancien_nbr_ligne_creer):
@@ -1377,14 +1583,72 @@ def play():
             # afficher en console de l'etat du jeu (optionnel)
             #inventaire(len(rep_cellules_jouable), len(rep_cellules), len(set(game.get_cels_occuped())), nouveau_nbr_ligne_creer)
             # mise à jour du nombre de cellules jouable
-            nbr_cel_jouables=len(rep_cellules_jouable)
+            tmp_nbr_cel_jouables=len(rep_cellules_jouables)
         except Exception as inst:
             error="1"
-    #retourner le tableau de resultat avec le nombre de ligne creer et les positions qu'il reste à jouer         
-    score = np.array([len(game.rep_line.get_rep_line()), nbr_cel_jouables])
+    #retourner le tableau de resultats avec le nombre de ligne creer et les positions qu'il reste à jouées         
+    score = np.array([len(game.rep_line.get_rep_line()), tmp_nbr_cel_jouables])
     return score
 
+def run():
+    pygame.init()
+    agent = DQNAgent()
+    counter_games = 0
+    score_plot = []
+    counter_plot =[]
+    record = 0
+    while counter_games < 150:
+        # Initialize classes
+        game = Game(440, 440)
+        player1 = game.player
+        food1 = game.food
 
+        # Perform first move
+        initialize_game(player1, game, food1, agent)
+        if display_option:
+            display(player1, food1, game, record)
+
+        while not game.crash:
+            #agent.epsilon is set to give randomness to actions
+            agent.epsilon = 80 - counter_games
+            
+            #get old state
+            state_old = agent.get_state(game, player1, food1)
+            
+            #perform random actions based on agent.epsilon, or choose the action
+            # reseau ----
+            if randint(0, 200) < agent.epsilon:
+                final_move = to_categorical(randint(0, 2), num_classes=3)
+            else:
+                # predict action based on the old state
+                prediction = agent.model.predict(state_old.reshape((1,11)))
+                final_move = to_categorical(np.argmax(prediction[0]), num_classes=3)
+                
+            #perform new move and get new state
+            player1.do_move(final_move, player1.x, player1.y, game, food1, agent)
+            state_new = agent.get_state(game, player1, food1)
+            
+            #set treward for the new state
+            reward = agent.set_reward(player1, game.crash)
+            
+            #train short memory base on the new action and state
+            agent.train_short_memory(state_old, final_move, reward, state_new, game.crash)
+            
+            # store the new data into a long term memory
+            agent.remember(state_old, final_move, reward, state_new, game.crash)
+            record = get_record(game.score, record)
+            if display_option:
+                display(player1, food1, game, record)
+                pygame.time.wait(speed)
+        
+        agent.replay_new(agent.memory)
+        counter_games += 1
+        print('Game', counter_games, '      Score:', game.score)
+        score_plot.append(game.score)
+        counter_plot.append(counter_games)
+    agent.model.save_weights('weights.hdf5')
+    plot_seaborn(counter_plot, score_plot)
+    
 def main():
     start = timeit.default_timer()
     print("\n running ...\n")
@@ -1398,14 +1662,19 @@ def main():
     nbr_iterations=5
     # initialisation du compteur d'itération
     cpt=0
-    # chaque itération est equivalent nombre de lignes creer est max et qu'il reste 0 cellule jouable
+    # chaque itération est equivalent => nombre de lignes creer est max et qu'il reste 0 cellule jouable
     while cpt<nbr_iterations:
+        # Si le nombre de lignes créer est maximum depuis le début du jeu
         if(max_nbr_lignes_crees<resultat[0]):
+            # modifier le meilleur score
             max_nbr_lignes_crees=resultat[0]
+            # afficher le meilleur score dans l'ihm
             score(resultat[0],0)
-        print(cpt, " score : ", resultat[0]," best score : ",max_nbr_lignes_crees)    
+        print(cpt, " score : ", resultat[0]," best score : ",max_nbr_lignes_crees)
+        # jouer une autre partie
         resultat=play()
         cpt+=1
+    # affichage ihm
     mainloop()
     end = timeit.default_timer()
     print('Temps execution  ----> ', end - start, '  secondes')

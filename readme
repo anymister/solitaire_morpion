@@ -6,4 +6,6 @@ Langage: Python
 
 Technologie: Q-Learning 
 
+Environnement de développement: Anaconda(Tensorflow)
+
 Le but vue que c'est un projet ouvert, c'est de le connecter à un réseau de neurones artificiel. 

@@ -8,4 +8,4 @@ Technologie: Q-Learning
 
 Environnement de développement: Anaconda(Tensorflow)
 
-Le but vue que c'est un projet ouvert, c'est de le connecter à un réseau de neurones artificiel. 
+Le but est de connecter le jeu solitaire-morpion à un réseau de neurones artificielles pour essayer d'atteindre un score record. 

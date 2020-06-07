@@ -95,11 +95,6 @@ class Game:
                     f.write("%d," % liste[i][j].diagonal_left)
                     f.write("%d," % liste[i][j].diagonal_right)
                     f.write("%d," % liste[i][j].cliqued)
-                    f.write("%d," % liste[i][j].line_ind)
-                    f.write("%d," % liste[i][j].possible_V)
-                    f.write("%d," % liste[i][j].possible_H)
-                    f.write("%d," % liste[i][j].possible_DL)
-                    f.write("%d," % liste[i][j].possible_DR)
                     f.write("%d," % liste[i][j].x)
                     f.write("%d\n" % liste[i][j].y)
         f.close()
@@ -222,7 +217,7 @@ def main():
     taille = 30  # Nombre de cellules = taille * taille
     game = Game(taille)  # Initialisation du jeu
     init_ihm(game)  # Initialization IHM
-    max_iteration, cpt_iteration = 5, 0  # Nombre de parties à jouer et Compteur de parties
+    max_iteration, cpt_iteration = 2, 0  # Nombre de parties à jouer et Compteur de parties
     rep_lines_bestScore, score_plot, counter_plot = [], [], []  # scores, numéros de parties, lignes du meilleur score
     while (cpt_iteration < max_iteration):
         game = Game(taille)  # Initialisation du jeu
@@ -248,7 +243,7 @@ def main():
             game.rep_lines.append(tmp_line)  # Ajouter la ligne à la liste des lignes jouées
             game.calculer_lignes_jouables()  # Recalcule des lignes jouables
             best = 0
-            if (len(game.rep_lines) > max(score_plot)):
+            if cpt_iteration == 0 or len(game.rep_lines) > max(score_plot):
                 rep_lines_bestScore = game.rep_lines  # Sauvegarder la liste des lignes du meilleur score
                 best = 1
             if (len(game.rep_playable_lines) == 0): # s'il reste plus de ligne jouable
